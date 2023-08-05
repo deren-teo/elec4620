@@ -1,0 +1,59 @@
+% ____________________ Standard packages ___________________
+
+\usepackage{amssymb}
+\usepackage{bm}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{mathtools}
+\usepackage{parskip}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+
+% _______________________ Numbering ________________________
+
+% Label figures/tables/equations by section
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\numberwithin{equation}{section}
+
+% Fake section for labelling in unnumbered sections
+\newcommand{\fakesection}[1]{   %
+  \par\refstepcounter{section}  % Increase section counter
+  \sectionmark{#1}              % Add section mark (header)
+}
+
+% _______________________ To Do Notes ______________________
+
+\setlength{\marginparwidth}{2cm}
+\usepackage[colorinlistoftodos]{todonotes}
+
+% _________________________ Tables _________________________
+
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{multirow}
+\usepackage{multicol}
+
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\newcolumntype{L}{>{\raggedright\arraybackslash}X}
+\newcolumntype{R}{>{\raggedleft\arraybackslash}X}
+
+\newcommand{\tabitem}{~~\llap{\textbullet}~~}
+\newcommand{\restretch}[1]{\renewcommand{\arraystretch}{#1}}
+
+% _______________________ Referencing ______________________
+
+\usepackage[backend=biber, style=ieee, urldate=long, sorting=nty]{biblatex}
+\setlength{\bibitemsep}{0.8\baselineskip}
+% \addbibresource{mybib.bib}
+
+% ________________________________ Code Listing ________________________________
+
+\usepackage{listings}
+
+\lstset{
+    basicstyle=\footnotesize,
+    language=python,
+    numbers=left,
+    xleftmargin=1.5em
+}

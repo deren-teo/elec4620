@@ -1,0 +1,164 @@
+\documentclass[a4paper, 11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{preamble}
+
+\title{ELEC4620 Assignment 1}
+\author{Deren Teo}
+
+\begin{document}
+
+\maketitle
+
+\section*{Question 1}
+\fakesection{1}
+
+The function for a rectangular pulse around $t=0$, with amplitude $A$ and width
+$T$, is:
+\begin{align*}
+    h(t) = \begin{cases}
+        A, & |t| < T/2 \\
+        0, & |t| > T/2
+    \end{cases}
+\end{align*}
+This is equivalently two step functions of equal magnitude and opposite sign at
+$t=\pm T/2$. Hence, the derivative of the rectangular pulse is composed of two
+impulses of equal magnitude and opposite sign, coinciding in time with the
+discontinuities in the pulse.
+\begin{align*}
+    h'(t) = A \delta(t+\frac{T}{2}) - A \delta(t-\frac{T}{2})
+\end{align*}
+Taking the Fourier transform of the derivative, which by definition is
+\begin{align*}
+    \widehat{H'}(f) \coloneqq \int_{-\infty}^{\infty} h'(t) e^{-j2\pi ft} dt
+\end{align*}
+we aim to evaluate the following expression, split into two integrals for
+simplicity.
+\begin{align*}
+    \widehat{H'}(f) = A \int_{-\infty}^{\infty} \delta(t + \frac{T}{2}) e^{-j2\pi ft} dt -
+            A \int_{-\infty}^{\infty} \delta(t - \frac{T}{2}) e^{-j2\pi ft} dt
+\end{align*}
+By definition of the Dirac delta, $\delta(t-T)$, for arbitrary $T$:
+\begin{align*}
+    \delta(t-T) = \begin{cases}
+        \infty, & t = T \\
+        0,      & t \neq T
+    \end{cases}
+    && \text{and} &&
+    \int_{-\infty}^{\infty} \delta(t-T) dt = 1
+\end{align*}
+Therefore, the Fourier transform of the derivative simplifies to
+\begin{align*}
+    \widehat{H'}(f) = Ae^{-j2\pi f(-T/2)} - Ae^{-j2\pi f(T/2)}
+          = A \left[ e^{j\pi fT} - e^{-j\pi fT}\right]
+\end{align*}
+Finally, we can integrate in the time domain by dividing by $j2\pi f$ in the
+frequency domain.
+\begin{align*}
+    H(f) = \frac{A}{j2\pi f} \left[ e^{j\pi fT} - e^{-j\pi fT}\right]
+\end{align*}
+Some re-arranging and substitutions can be performed to neaten the result, if desired:
+\begin{align*}
+    H(f) = \frac{A}{\pi f}\sin(\pi Tf)
+         = AT\frac{\sin(\pi Tf)}{\pi Tf}
+         = AT\text{sinc}(Tf)
+\end{align*}
+Thus, we have derived the Fourier transform of a rectangular pulse.
+
+\newpage
+
+We now repeat this procedure for a triangle function using a double derivative.
+The function for a triangular pulse around $t=0$, with amplitude $A$ and width $T$, is:
+\begin{align*}
+    h(t) = \begin{cases}
+        A(1 - 2|t|/T), & |t| \leq T/2 \\
+        0,             & |t| > T/2
+    \end{cases}
+\end{align*}
+The first derivative produces a result composed of two rectangular pulses of
+equal magnitude and opposite sign, or equivalently three step functions.
+\begin{align*}
+    h'(t) = \begin{cases}
+        2A/T, & -T/2 \leq t \leq 0 \\
+       -2A/T, &  0 \leq t \leq T/2 \\
+        0,    & |t| > T/2
+    \end{cases}
+\end{align*}
+Hence, as before, the second derivative is composed of three impulses coinciding
+with the discontinuities in the first derivative.
+\begin{align*}
+    h''(t) = \frac{2A}{T}\delta(t+\frac{T}{2}) -
+             \frac{4A}{T}\delta(t) +
+             \frac{2A}{T}\delta(t-\frac{T}{2})
+\end{align*}
+The Fourier transform of the second derivative is therefore
+\begin{align*}
+    \widehat{H''}(f) = \frac{2A}{T}\int_{-\infty}^\infty \delta(t+\frac{T}{2}) e^{-j2\pi ft} dt -
+             \frac{4A}{T}\int_{-\infty}^\infty \delta(t) e^{-j2\pi ft} dt +
+             \frac{2A}{T}\int_{-\infty}^\infty \delta(t-\frac{T}{2}) e^{-j2\pi ft} dt
+\end{align*}
+Once again, using the definition of the Dirac delta, the Fourier transform
+simplifies to
+\begin{align*}
+    \widehat{H''}(f) = \frac{2A}{T} \left[ e^{-j2\pi f(-T/2)} - 2e^{-j2\pi f(0)} + e^{-j2\pi f(T/2)} \right]
+\end{align*}
+and further to
+\begin{align*}
+    \widehat{H''}(f) = \frac{2A}{T} \left[ e^{j\pi fT} - 2 + e^{-j\pi fT} \right]
+\end{align*}
+We can integrate twice in the time domain by dividing by $(j2\pi f)^2$ in the frequency
+domain.
+\begin{align*}
+    H(f) = \frac{2A}{(j2\pi f)^2 T} \left[ e^{j\pi fT} - 2 + e^{-j\pi fT} \right]
+         = \frac{-A}{2\pi^2f^2 T} \left[ e^{j\pi fT} - 2 + e^{-j\pi fT} \right]
+\end{align*}
+Finally, as with the rectangular pulse, we can re-arrange this result into a
+more familiar form:
+\begin{align*}
+    H(f) = \frac{A}{\pi^2f^2T}(1 - \cos(\pi Tf))
+\end{align*}
+Thus, we have derived the Fourier transform of a triangular pulse.
+
+Having derived the Fourier transforms of the two functions, we are interested in
+comparing the rates at which their magnitudes decrease as frequency increases.
+We note the only term contributing to a change in magnitude with frequency is
+the $1/f$ term for the rectangular pulse, and the $1/f^2$ term for the
+triangular pulse.
+
+Indeed, in general, if a function has discontinuities in the $n^\text{th}$
+derivative, the sidelobes of its Fourier transform will fall off as $1/f^{n+1}$.
+Intuitively, this is because the function must be derived $n+1$ times to obtain
+a number of impulses which can be Fourier transformed without yielding any
+frequency-dependent coefficients. The transform of the derivative is then
+integrated $n+1$ times by dividing by $(j2\pi f)^{n+1}$; hence, the term
+$1/f^{n+1}$ is produced.
+
+\newpage
+
+Figure \ref{fig:q1_sidelobes} presents the Fourier transforms of the rectangular
+and triangular pulses, enabling a visual comparison of the rates at which their
+sidelobes fall off.
+
+\begin{figure}[ht]
+    \includegraphics[width=0.95\textwidth]{images/q1_sidelobes.png}
+    \caption{Fourier transform sidelobe fall off comparison: rectangular and
+             triangular pulses.}
+    \label{fig:q1_sidelobes}
+\end{figure}
+
+\newpage
+\section*{Question 2}
+\fakesection{2}
+
+
+
+\newpage
+\section*{Question 3}
+\fakesection{3}
+
+\section*{Question 4}
+\fakesection{4}
+
+\section*{Question 5}
+\fakesection{5}
+
+\end{document}
