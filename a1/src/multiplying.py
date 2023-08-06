@@ -6,8 +6,8 @@ Fourier transform methods.
 """
 
 import numpy as np
-import scipy.signal as signal
 
+from scipy.signal import convolve
 from scipy.fft import fft, ifft
 
 ### UTILITY FUNCTIONS ##########################################################
@@ -36,7 +36,7 @@ def multiply_conv(x: np.array, y: np.array, carry: bool = False) -> np.array:
     product of vectorised integers `x` and `y`. Otherwise, the convolution
     result is returned "as-is".
     """
-    z = signal.convolve(x, y, mode="full", method="direct")
+    z = convolve(x, y, mode="full", method="direct")
     if carry:
         z = multiply_carry(z)
     return z
