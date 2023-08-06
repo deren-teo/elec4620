@@ -149,7 +149,61 @@ sidelobes fall off.
 \section*{Question 2}
 \fakesection{2}
 
+Denote the given polynomials in $z$ by $X(z)$ and $Y(z)$, as follows:
+\begin{align*}
+    X(z) &= 1 + 2z^{-1} + 6z^{-2} + 11z^{-3} + 15z^{-4} + 12z^{-5} \\
+    Y(z) &= 1 - 3z^{-1} - 3z^{-2} + 7z^{-3} - 7z^{-4} + 3z^{-5}
+\end{align*}
+Their corresponding vectors are constructed from their respective coefficients:
+\begin{align*}
+    v_X = [1, 2, 6, 11, 15, 12] && \text{and} && v_Y = [1, -3, -3, 7, -7, 3]
+\end{align*}
+The result of multiplying $X(z)$ and $Y(z)$ can be obtained by convolving their
+respective vectors and interpreting the outcome as the coefficients of the
+polynomial product. That is,
+\begin{align*}
+    v_X \ast v_Y = [1, -1, -3, -6, -29, -35, -40, 10, 12, -39, 36]
+\end{align*}
+This can be calculated using the \texttt{convolve} function from the Python
+\texttt{scipy.signal} library:
+\begin{center}
+    \texttt{signal.convolve(vx, vy, mode="full", method="direct")}
+\end{center}
+which calculates the full discrete linear convolution, automatically
+zero-padding the vectors as necessary, using traditional convolution (i.e.
+multiplying and summing, as opposed to the FFT).
 
+Hence, we can interpret the convolution result as the polynomial product of
+$X(z)$ and $Y(z)$ as
+\begin{align*}
+    1 - z^{-1} - 3z^{-2} - 6z^{-3} - 29z^{-4} - 35z^{-5} - 40z^{-6} + 10z^{-7} +
+    12z^{-8} - 39z^{-9} + 36z^{-10}
+\end{align*}
+Since convolution is equivalent to multiplication in the Fourier domain, we
+could equivalently Fourier transform both vectors, multiply in the Fourier
+domain, then perform an inverse Fourier transform to obtain the same vector of
+coefficients derived above.
+
+When doing this in Python, we must manually zero-pad the vectors before
+performing the FFT.
+\begin{center}
+    \texttt{vx = np.pad(vx, (0, len(vy) - 1))} \\
+    \texttt{vy = np.pad(vy, (0, len(vx) - 1))}
+\end{center}
+Here, the Python \texttt{numpy} package is used to zero-pad both vectors on the
+right side only to the appropriate length. Then, \texttt{fft} and \texttt{ifft}
+from \texttt{scipy.fft} can be applied:
+\begin{center}
+    \texttt{ifft(fft(vx) * fft(vy))}
+\end{center}
+This calculates the following vector, which we can observe is identical to the
+vector determined through direct convolution:
+\begin{center}
+    \texttt{[  1.  -1.  -3.  -6. -29. -35. -40.  10.  12. -39.  36.]}
+\end{center}
+Hence, the same polynomial product can be constructed from either convolving the
+vector representations of the polynomials, or multiplying the Fourier transforms
+of the vectors, then taking the inverse Fourier transform.
 
 \newpage
 \section*{Question 3}
