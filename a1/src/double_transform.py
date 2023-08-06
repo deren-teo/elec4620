@@ -29,10 +29,9 @@ def od(H: np.array) -> np.array:
 
 def main():
 
-    ### PART A ###
-
     x = np.array([1, 2, 4, 4, 5, 3, 7, 8])
-    y = np.array([1, 5, 3, 1, 3, 5, 3, 7])
+    y = np.array([1, 5, 3, 1, 3, 5, 3, 7])  # PART A: comment out for the other
+    # y = np.array([1, 5, 3, 1, 3, 5, 3, 0])  # PART B: comment out for the other
     print(f"{fft(x) = }")
     print(f"{fft(y) = }")
 
@@ -45,7 +44,7 @@ def main():
     print(f"{ev(np.imag(Z)) = }")
 
     X = (ev(np.real(Z)) + 1j * od(np.imag(Z)))
-    Y = (od(np.real(Z)) + 1j * ev(np.imag(Z))) * -1j
+    Y = (ev(np.imag(Z)) - 1j * od(np.real(Z)))
     print(f"{X = }")
     print(f"{Y = }")
 

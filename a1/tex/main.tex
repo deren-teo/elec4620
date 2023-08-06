@@ -267,63 +267,93 @@ and converting to base 10.
 
 \begin{enumerate}[label=\alph*)]
 
-    \item First, we individually transform the sequences using \texttt{fft}
+    \item First, we individually transform the sequences using the \texttt{fft}
     function from \texttt{scipy.fft}:
     \begin{align*}
-        \texttt{fft(x)} = [&34, -1.879+j6.536, -5+j7, -6.121+j0.536, \\
-                           &0, -6.121-j0.536, -5-j7, -1.879-j6.536] \\
-        \texttt{fft(y)} = [&28, 2.243+j4.243, -2-j2, -6.243+j4.243, \\
-                           &-8, -6.243-j4.243, -2+j2, 2.243-j4.243]
+        \texttt{fft(x)} = [&34,\ -1.879+j6.536,\ -5+j7,\ -6.121+j0.536,\ \\
+                           &0,\ -6.121-j0.536,\ -5-j7,\ -1.879-j6.536] \\
+        \texttt{fft(y)} = [&28,\ 2.243+j4.243,\ -2-j2,\ -6.243+j4.243,\ \\
+                           &-8,\ -6.243-j4.243,\ -2+j2,\ 2.243-j4.243]
     \end{align*}
-    Now, we combine $x$ and $y$ elementwise into a single complex vector:
+    Now, we combine $x$ and $y$ element-wise into a single complex vector:
     \begin{align*}
-        z = [1+j, 2+j5, 4+j3, 4+j, 5+j3, 3+j5, 7+j3, 8+j7]
+        z = [1+j\ \ 2+j5\ \ 4+j3\ \ 4+j\ \ 5+j3\ \ 3+j5\ \ 7+j3\ \ 8+j7]
     \end{align*}
-    and Fourier transform this using the `fft' function:
+    and Fourier transform this to obtain:
     \begin{align*}
-        \texttt{fft(z)} = [&34+j28, -6.121+j8.778, -3+j5, -10.364-j5.707, \\
-                           &-j8, -1.879-j6.778, -7-j9, 2.364-j4.293]
+        \texttt{fft(z)} = [&34+j28,\ -6.121+j8.778,\ -3+j5,\ -10.364-j5.707,\ \\
+                           &-j8,\ -1.879-j6.778,\ -7-j9,\ 2.364-j4.293]
     \end{align*}
     The Fourier transforms of $x$ and $y$ can be determined from the
     Fourier transform of $z$ as
     \begin{align*}
-         X &= \Ev(\Re(Z)) + j\Od(\Im(Z)) \\
-        jY &= \Od(\Re(Z)) + j\Ev(\Im(Z)) \text{ or }
-              \Ev(\Im(Z)) + j\Od(\Re(Z))
+        X &= \Ev(\Re(Z)) + j\Od(\Im(Z)) \\
+        Y &= \Ev(\Im(Z)) - j\Od(\Re(Z))
     \end{align*}
-    where $Z$ is the Fourier transform of $z$. The even and odd components are
-    determined as:
+    where $Z$ is the Fourier transform of $z$. Since $x$ is purely real and $y$
+    purely imaginary, the Fourier transform of $x$ has a purely even real
+    component and purely odd imaginary component, and vice versa for the Fourier
+    transform of $y$. Even and odd components are orthogonal; hence, $X$ and $Y$
+    can be independently reconstructed.
+
+    The even and odd components of a sequence $H(n)$ are determined as:
     \begin{align*}
         \Ev(n) = \frac{H(n)+H(-n)}{2} && \Od(n) = \frac{H(n)-H(-n)}{2}
     \end{align*}
     where $H(-n)$ is the vector $H$ with all elements after the first in
     reversed order. Hence,
     \begin{align*}
-        \Ev(\Re(Z)) &= [34, -1.879, -5, -6.121, 0, -6.121, -5, -1.879] \\
-        \Od(\Im(Z)) &= [0, 6.536, 7, 0.536, 0, -0.536, -7, -6.535] \\
-        \Od(\Re(Z)) &= [0, -4, 243, 2, -4,243, 0, 4.243, -2, 4.243] \\
-        \Ev(\Im(Z)) &= [28, 2.243, -2, -6.243, -8, -6.243, -2, 2.243]
+        \Ev(\Re(Z)) &= [34,\ -1.879,\ -5,\ -6.121,\ 0,\ -6.121,\ -5,\ -1.879] \\
+        \Od(\Im(Z)) &= [0,\ 6.536,\ 7,\ 0.536,\ 0,\ -0.536,\ -7,\ -6.535] \\
+        \Ev(\Im(Z)) &= [28,\ 2.243,\ -2,\ -6.243,\ -8,\ -6.243,\ -2,\ 2.243] \\
+        \Od(\Re(Z)) &= [0,\ -4,\ 243,\ 2,\ -4,243,\ 0,\ 4.243,\ -2,\ 4.243]
     \end{align*}
-    wherein from the second element onwards of each vector, the even and odd
-    symmetries can be observed. Finally, we can use this result to reconstruct
-    the individual Fourier transforms of $x$ and $y$:
+    wherein from the second element of each vector onward, the even and odd
+    symmetries can be observed. Finally, we can reconstruct the individual
+    Fourier transforms of $x$ and $y$:
     \begin{align*}
-        X = [&34, -1.879+j6.536, -5+j7, -6.121+j0.536, \\
-             &0, -6.121-j0.536, -5-j7, -1.879-j6.536] \\
-        Y = [&28, 2.243+j4.243, -2-j2, -6.243+j4.243, \\
-             &-8, -6.243-j4.243, -2+j2, 2.243-j4.243]
+        X = [&34,\ -1.879+j6.536,\ -5+j7,\ -6.121+j0.536,\ \\
+             &0,\ -6.121-j0.536,\ -5-j7,\ -1.879-j6.536] \\
+        Y = [&28,\ 2.243+j4.243,\ -2-j2,\ -6.243+j4.243,\ \\
+             &-8,\ -6.243-j4.243,\ -2+j2,\ 2.243-j4.243]
     \end{align*}
-    Of note is that to determine $Y$ the expression for $jY$ must be multiplied
-    by $-j$. Comparing these vectors to those determined individually at the
-    start, we can see they are identical. Therefore, we have shown that the
-    double transform algorithm gives the same answer as directly transforming
-    the sequences.
+    Comparing these vectors to those determined individually at the start, we
+    can see they are identical. Therefore, we have shown that the double
+    transform algorithm gives the same answer as directly transforming the
+    sequences.
 
 \newpage
 
     \item In the previous part, the double transform algorithm was applied to
     sequences of equal length. However, it is also applicable to sequences of
-    unequal length by right-padding the shorter sequence with zero.
+    unequal length by right-padding the shorter sequence with zero. For example,
+    \begin{align*}
+        x = [1\ 2\ 4\ 4\ 5\ 3\ 7\ 8] && y = [1\ 5\ 3\ 1\ 3\ 5\ 3]
+    \end{align*}
+    The individual Fourier transforms of $x$ and $y$ are:
+    \begin{align*}
+        \texttt{fft(x)} = [&34,\ -1.879+j6.536,\ -5+j7,\ -6.121+j0.536 \\
+                           &0,\ -6.121-j0.536,\ -5-j7,\ -1.879-j6.536] \\
+        \texttt{fft(y)} = [&21,\ 0.604+j1.254,\ -5.494-j4.381,\ -2.110-j0.482 \\
+                           &-2.110+j0.482,\ -5.494+j4.381,\ 0.604-j1.254]
+    \end{align*}
+    As before, we combine $x$ and $y$ element-wise into a single complex vector,
+    but this time we must right-pad $y$ with zero such that the vectors are
+    equal length.
+    \begin{align*}
+        z = [1+j\ \ 2+j5\ \ 4+j3\ \ 4+j\ \ 5+j3\ \ 3+j5\ \ 7+j3\ \ 8+j0]
+    \end{align*}
+    The Fourier transform of $z$ is
+    \begin{align*}
+        \texttt{fft(z)} = [&34+j21,\ -1.172+j3.828,\ 4+j5,\ -5.414-j0.757,\\
+                           &-j,\ -6.828-j1.828,\ -14-j9,\ -2.586-j9.243]
+    \end{align*}
+    Again, the Fourier transforms of $x$ and $y$ can individually be determined
+    from $Z$ using the even and odd components of the real and imaginary parts
+    of $Z$, per part (a). Hence,
+    \begin{align*}
+        \Ev(\Re(Z)) = []
+    \end{align*}
 
 \end{enumerate}
 
