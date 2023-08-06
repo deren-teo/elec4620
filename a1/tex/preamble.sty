@@ -1,4 +1,4 @@
-% ____________________ Standard packages ___________________
+% ______________________________ Standard packages _____________________________
 
 \usepackage{amssymb}
 \usepackage{bm}
@@ -7,9 +7,15 @@
 \usepackage{mathtools}
 \usepackage{parskip}
 \usepackage{pdfpages}
+\usepackage{physics}      % For non-fancy \Re and \Im rendering
 \usepackage{subcaption}
 
-% _______________________ Numbering ________________________
+% _______________________________ Math Shortcuts _______________________________
+
+\newcommand{\Ev}{\text{Ev}}
+\newcommand{\Od}{\text{Od}}
+
+% _________________________________ Numbering __________________________________
 
 % Label figures/tables/equations by section
 \numberwithin{figure}{section}
@@ -22,12 +28,12 @@
   \sectionmark{#1}              % Add section mark (header)
 }
 
-% _______________________ To Do Notes ______________________
+% _________________________________ To Do Notes ________________________________
 
 \setlength{\marginparwidth}{2cm}
 \usepackage[colorinlistoftodos]{todonotes}
 
-% _________________________ Tables _________________________
+% ___________________________________ Tables ___________________________________
 
 \usepackage{booktabs}
 \usepackage{tabularx}
@@ -41,7 +47,7 @@
 \newcommand{\tabitem}{~~\llap{\textbullet}~~}
 \newcommand{\restretch}[1]{\renewcommand{\arraystretch}{#1}}
 
-% _______________________ Referencing ______________________
+% _________________________________ Referencing ________________________________
 
 \usepackage[backend=biber, style=ieee, urldate=long, sorting=nty]{biblatex}
 \setlength{\bibitemsep}{0.8\baselineskip}
