@@ -7,7 +7,7 @@ N-point sequences using one commplex N-point transform.
 
 import numpy as np
 
-from scipy.fft import fft
+from scipy.fft import fft, ifft
 
 ### DSP FUNCTIONS ##############################################################
 
@@ -30,12 +30,16 @@ def od(H: np.array) -> np.array:
 def main():
 
     x = np.array([1, 2, 4, 4, 5, 3, 7, 8])
-    y = np.array([1, 5, 3, 1, 3, 5, 3, 7])  # PART A: comment out for the other
-    # y = np.array([1, 5, 3, 1, 3, 5, 3, 0])  # PART B: comment out for the other
+    # y = np.array([1, 5, 3, 1, 3, 5, 3, 7])  # PART A: comment out for the other
+    y = np.array([1, 5, 3, 1, 3, 5, 3, 0])  # PART B: comment out for the other
+
+    Z = fft(np.array([a+b*1j for a, b in zip(x, y)]))
+    X = ev(np.real(Z)) + 1j * od(np.imag(Z))
+    Y = ev(np.imag(Z)) - 1j * od(np.real(Z))
+
     print(f"{fft(x) = }")
     print(f"{fft(y) = }")
 
-    Z = fft(np.array([a+b*1j for a, b in zip(x, y)]))
     print(f"{Z = }")
 
     print(f"{ev(np.real(Z)) = }")
@@ -43,10 +47,10 @@ def main():
     print(f"{od(np.real(Z)) = }")
     print(f"{ev(np.imag(Z)) = }")
 
-    X = (ev(np.real(Z)) + 1j * od(np.imag(Z)))
-    Y = (ev(np.imag(Z)) - 1j * od(np.real(Z)))
     print(f"{X = }")
     print(f"{Y = }")
+
+    print(f"ifft(Y) = {np.round(ifft(Y).real, 3)}")
 
 
 if __name__ == "__main__":

@@ -328,14 +328,15 @@ and converting to base 10.
     sequences of equal length. However, it is also applicable to sequences of
     unequal length by right-padding the shorter sequence with zero. For example,
     \begin{align*}
-        x = [1\ 2\ 4\ 4\ 5\ 3\ 7\ 8] && y = [1\ 5\ 3\ 1\ 3\ 5\ 3]
+        x = [1\ 2\ 4\ 4\ 5\ 3\ 7\ 8] &&
+        y = [1\ 5\ 3\ 1\ 3\ 5\ 3\ \textcolor{red}{0}]
     \end{align*}
     The individual Fourier transforms of $x$ and $y$ are:
     \begin{align*}
         \texttt{fft(x)} = [&34,\ -1.879+j6.536,\ -5+j7,\ -6.121+j0.536 \\
                            &0,\ -6.121-j0.536,\ -5-j7,\ -1.879-j6.536] \\
-        \texttt{fft(y)} = [&21,\ 0.604+j1.254,\ -5.494-j4.381,\ -2.110-j0.482 \\
-                           &-2.110+j0.482,\ -5.494+j4.381,\ 0.604-j1.254]
+        \texttt{fft(y)} = [&21,\ -2.707-j0.707,\ -2-j9,\ -1.293-j0.707 \\
+                           &-1,\ -1.293+j0.707,\ -2+j9,\ -2.707+j0.707]
     \end{align*}
     As before, we combine $x$ and $y$ element-wise into a single complex vector,
     but this time we must right-pad $y$ with zero such that the vectors are
@@ -352,8 +353,28 @@ and converting to base 10.
     from $Z$ using the even and odd components of the real and imaginary parts
     of $Z$, per part (a). Hence,
     \begin{align*}
-        \Ev(\Re(Z)) = []
+        \Ev(\Re(Z)) &= [34,\ -1.879,\ -5,\ -6.121,\ 0,\ -6.121,\ -5,\ -1.879] \\
+        \Od(\Im(Z)) &= [0,\ 6.536,\ 7,\ 0.536,\ 0,\ -0.536,\ -7,\ -6.536] \\
+        \Ev(\Im(Z)) &= [0,\ 0.707,\ 9,\ 0.707,\ 0,\ -0.707,\ -9,\ -0.707] \\
+        \Od(\Re(Z)) &= [21,\ -2.707,\ -2,\ -1.293,\ -1,\ -1.293,\ -2,\ -2.707]
     \end{align*}
+    Part part (a), we can reconstruct the individual Fourier transforms of $x$
+    and $y$:
+    \begin{align*}
+        X = [&34,\ -1.879+j6.536,\ -5+j7,\ -6.121+j0.536 \\
+             &0,\ -6.121-j0.536,\ -5-j7,\ -1.879-j6.536] \\
+        Y = [&21,\ -2.707-j0.707,\ -2-j9,\ -1.293-j0.707 \\
+             &-1,\ -1.293+j0.707,\ -2+j9,\ -2.707+j0.707]
+    \end{align*}
+    Comparing these vectors to those determined individually at the start, we
+    can see they are identical. We can additionally check that the shorter
+    sequence can be recovered using the inverse Fourier transform:
+    \begin{align*}
+        \texttt{ifft(Y) = [ 1.  5.  3.  1.  3.  5.  3. -0.]}
+    \end{align*}
+    Hence, given we know how many zeros were padded onto the end of the shorter
+    sequence, it can indeed be recovered. Therefore, the double transform
+    algorithm can be applied even if the sequences differ in length.
 
 \end{enumerate}
 
