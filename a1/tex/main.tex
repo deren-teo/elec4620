@@ -209,6 +209,59 @@ of the vectors, then taking the inverse Fourier transform.
 \section*{Question 3}
 \fakesection{3}
 
+Given the following numbers in base 10, we seek to apply similar methods to
+Question 2 to multiply the numbers, first using convolution, then using Fourier
+transform techniques.
+\begin{align*}
+    x = 8755790 && \text{and} && y = 1367267
+\end{align*}
+First, however, we can perform regular multiplication to determine the correct
+answer that we should get from the convolution and Fourier transform methods:
+\begin{align*}
+    8755790 \times 1367267 = 11971502725930
+\end{align*}
+Next, the numbers are constructed digit-wise into vectors:
+\begin{align*}
+    v_x = [8, 7, 5, 5, 7, 9, 0] && \text{and} && v_y = [1, 3, 6, 7, 2, 6, 7]
+\end{align*}
+As before, the result of multiplying $x$ and $y$ can be obtained by convolving
+their respective vectors. However, the ``carry" step must then be performed to
+produce a number in base 10.
+
+Once again, using \texttt{convolve} from \texttt{scipy.signal} with the same
+keyword arguments:
+\begin{align*}
+    v_x \ast v_y = [8, 31, 74, 118, 117, 157, 212, 192, 142, 95, 103, 63, 0]
+\end{align*}
+Now, however, unlike with the polynomial multiplication, we cannot expect to
+arrive at the correct value by simply stringing together all of these digits.
+Instead, starting from the right, each value must be taken modulo 10, and the
+remainder added to the value immediately to the left. This yields the following
+vector, which now can be concatenated into the result of $x \times y$:
+\begin{align*}
+    [1, 1, 9, 7, 1, 5, 0, 2, 7, 2, 5, 9, 3, 0] \longrightarrow 11971502725930
+\end{align*}
+Naturally, the same outcome can be achieved by Fourier transforming the vectors,
+multiplying in the Fourier domain, then inverse Fourier transforming the result.
+Again, in Python, the vectors must be zero-padded before performing the FFT.
+\begin{center}
+    \texttt{vx = np.pad(vx, (0, len(vy) - 1))} \\
+    \texttt{vy = np.pad(vy, (0, len(vx) - 1))}
+\end{center}
+Then, using the same Python function calls as from Question 2:
+\begin{center}
+    \texttt{ifft(fft(vx) * fft(vy)) =}
+        [8.  31.  74. 118. 117. 157. 212. 192. 142.  95. 103.  63.   0.]
+\end{center}
+The result is identical to the vector produced by convolution. Therefore,
+applying the same ``carrying'' process will yield the same number result.
+
+Hence, integer multiplication also can be accomplished by either convolving the
+vector representations of the numbers and converting to base 10, or multiplying
+the Fourier transforms of the vectors, then taking the inverse Fourier transform
+and converting to base 10.
+
+\newpage
 \section*{Question 4}
 \fakesection{4}
 
