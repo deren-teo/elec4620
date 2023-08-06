@@ -39,16 +39,13 @@ def main():
     T = 1e-1    # Sample spacing
 
     _t = np.linspace(-N*T/2, N*T/2, N, endpoint=False)
-    _f = fftfreq(N, T)[:N//2]
-    _f = np.concatenate((-1 * np.flip(_f), _f))
+    _f = fftfreq(N, T)
 
     _y1 = rectangular_pulse(_t)
-    _H1 = 2 / N * np.abs(fft(_y1)[0:N//2])
-    _H1 = np.concatenate((np.flip(_H1), _H1))
+    _H1 = 2 / N * np.abs(fft(_y1))
 
     _y2 = triangular_pulse(_t)
-    _H2 = 2 / N * np.abs(fft(_y2)[0:N//2])
-    _H2 = np.concatenate((np.flip(_H2), _H2))
+    _H2 = 2 / N * np.abs(fft(_y2))
 
     fig, ax = plt.subplots(figsize=(8, 4))
 
