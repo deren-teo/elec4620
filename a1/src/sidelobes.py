@@ -13,7 +13,7 @@ import seaborn as sns
 
 from scipy.fft import fft, fftfreq
 
-from config import A1_ROOT
+from config import A1_ROOT, SAVEFIG_CONFIG
 
 ### DSP FUNCTIONS ##############################################################
 
@@ -57,7 +57,7 @@ def main():
     ax.set_ylabel("Magnitude")
 
     fname = Path(A1_ROOT, "output", "q1_sidelobes.png")
-    fig.savefig(fname, dpi=300, bbox_inches='tight')
+    fig.savefig(fname, **SAVEFIG_CONFIG)
 
 
 if __name__ == "__main__":

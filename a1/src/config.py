@@ -24,3 +24,9 @@ PLT_CONFIG = {
 }
 
 plt.rcParams.update(PLT_CONFIG)
+
+# Matplotlib figure saving configuration
+SAVEFIG_CONFIG = {
+    "dpi": 300,
+    "bbox_inches": "tight",
+}
