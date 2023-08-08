@@ -35,6 +35,31 @@ def plot_poles_or_zeros(F: Polynomial, type: str, ax: Axes) -> Axes:
 
     return ax
 
+def axes_ratio_scale(ax: Axes, ratio: float) -> Axes:
+    """
+    Sets axes aspect as equal and autoscales the axes. If the axes limits ratio
+    does not match the given aspect ratio (i.e. the ratio height / width), the
+    x- or y-axis is lengthened to the desired ratio. Returns the modified axes.
+    """
+    ax.set_aspect("equal")
+    ax.autoscale()
+
+    xlim, ylim = ax.get_xlim(), ax.get_ylim()
+    xrng, yrng = xlim[1] - xlim[0], ylim[1] - ylim[0]
+    curr_ratio = yrng / xrng
+
+    if curr_ratio > ratio: # i.e. the current ratio is too tall and narrow
+        add_xlim = (yrng / ratio - xrng) * 0.5
+        new_xlim = (xlim[0] - add_xlim, xlim[1] + add_xlim)
+        ax.set_xlim(new_xlim)
+
+    if curr_ratio < ratio: # i.e. the current ratio is too short and wide
+        add_ylim = (xrng * ratio - yrng) * 0.5
+        new_ylim = (ylim[0] - add_ylim, ylim[1] + add_ylim)
+        ax.set_ylim(new_ylim)
+
+    return ax
+
 def draw_unit_circle(ax: Axes) -> Axes:
     """
     Draws dotted axes and unit circle on the given axes, similar in style to
@@ -44,7 +69,6 @@ def draw_unit_circle(ax: Axes) -> Axes:
 
     u_circ = Circle(xy=(0, 0), radius=1, fill=False, **style_config)
     ax.add_patch(u_circ)
-    ax.autoscale()
 
     x_axis = Line2D(xdata=ax.get_xlim(), ydata=(0, 0), **style_config)
     y_axis = Line2D(xdata=(0, 0), ydata=ax.get_ylim(), **style_config)
@@ -68,7 +92,9 @@ def main():
     plt.rcParams.update(PLT_CONFIG)
 
     fig, ax = plt.subplots()
+
     ax = plot_poles_or_zeros(F, "zeros", ax)
+    ax = axes_ratio_scale(ax, ratio=9/16)
     ax = draw_unit_circle(ax)
     ax.set_title("Zero Plot for $F(z)$")
 

@@ -389,25 +389,21 @@ and converting to base 10.
     \begin{align*}
         F(z) = 1 + 5z^{-1} + 3z^{-2} + 4z^{-3} + 4z^{-4} + 2z^{-5} + z^{-6}
     \end{align*}
-    we can determine from the purely negative exponents that this is an all-zero
-    model. The position of the zeros is given by the roots of $F(z)$, but with
-    positive rather than negative powers. The roots can be determined using the
-    Python \texttt{numpy.polynomial} sub-package:
-    \begin{verbatim}
-        from numpy.polynomial.polynomial import Polynomial
-
-        F = Polynomial([1, 5, 3, 4, 4, 2, 1])
-        F.roots()
-    \end{verbatim}
-    This finds the following six roots, corresponding with the order of the
-    polynomial:
+    the absence of a denominator indicates an all-zero model. The positions of
+    the zeros in the complex plane are the roots of $F(z)$, which can be found
+    using \texttt{numpy.polynomial}:
+    \begin{center}
+        \texttt{Polynomial([1, 5, 3, 4, 4, 2, 1]).roots()}
+    \end{center}
+    This finds the following six roots:
     \begin{align*}
         z = -1.332,\ -0.628\pm j1.565,\ -0.223,\ 0.405\pm j1.011
     \end{align*}
-    Plotting these on the complex plane:
+    Figure \ref{fig:q5_polezero} plots these on the complex plane, with the unit
+    circle for reference.
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=0.6\textwidth]{images/q5_polezero.png}
+        \includegraphics[width=0.83\textwidth]{images/q5_polezero.png}
         \caption{Zero plot for $F(z)$; no poles are present.}
         \label{fig:q5_polezero}
     \end{figure}
