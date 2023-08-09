@@ -399,15 +399,56 @@ and converting to base 10.
     \begin{align*}
         z = -1.332,\ -0.628\pm j1.565,\ -0.223,\ 0.405\pm j1.011
     \end{align*}
-    Figure \ref{fig:q5_polezero} plots these on the complex plane, with the unit
+    Figure \ref{fig:q5a_polezero} plots these on the complex plane, with the unit
     circle for reference.
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=0.83\textwidth]{images/q5_polezero.png}
+        \includegraphics[width=0.76\textwidth]{images/q5a_polezero.png}
         \caption{Zero plot for $F(z)$; no poles are present.}
-        \label{fig:q5_polezero}
+        \label{fig:q5a_polezero}
+    \end{figure}
+
+    \item The sinusoidal steady-state response of the system can be modelled by
+    evaluating the magnitude of $F(z)$ around the unit circle. This is
+    effectively what is done by the DFT.
+
+    That is,
+    \begin{align*}
+        F(z) \big|_{z=e^{-j\frac{2\pi}{N}k},\ k=0,\ldots,N-1}
+    \end{align*}
+    Figure \ref{fig:q5b_dftsample} compares \texttt{scipy.fft} and a
+    self-implemented DFT function for $N=128$.
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=0.76\textwidth]{images/q5b_dftsample.png}
+        \caption{$|F(z)|$ evaluated at 128 points around the unit circle.}
+        \label{fig:q5b_dftsample}
     \end{figure}
 
 \end{enumerate}
+
+%-----------------------
+% Code listings
+%-----------------------
+\newpage
+\appendix
+\begin{center}
+    \LARGE{\textbf{Appendix}}
+\end{center}
+
+\section{\texttt{sidelobes.py}}
+\lstinputlisting{../src/sidelobes.py}
+
+\newpage
+\section{\texttt{multiplying.py}}
+\lstinputlisting{../src/multiplying.py}
+
+\newpage
+\section{\texttt{double\_transform.py}}
+\lstinputlisting{../src/double_transform.py}
+
+\newpage
+\section{\texttt{polezero\_dft.py}}
+\lstinputlisting{../src/polezero_dft.py}
 
 \end{document}
