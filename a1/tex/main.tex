@@ -27,11 +27,11 @@ discontinuities in the pulse.
 \begin{align*}
     h'(t) = A \delta(t+\frac{T}{2}) - A \delta(t-\frac{T}{2})
 \end{align*}
-Taking the Fourier transform of the derivative, which by definition is
+Writing out the Fourier transform of the derivative, which by definition is
 \begin{align*}
     \widehat{H'}(f) \coloneqq \int_{-\infty}^{\infty} h'(t) e^{-j2\pi ft} dt
 \end{align*}
-we aim to evaluate the following expression, split into two integrals for
+we get the following expression, which has been split into two integrals for
 simplicity.
 \begin{align*}
     \widehat{H'}(f) = A \int_{-\infty}^{\infty} \delta(t + \frac{T}{2}) e^{-j2\pi ft} dt -
@@ -146,6 +146,9 @@ sidelobes fall off.
     \label{fig:q1_sidelobes}
 \end{figure}
 
+The full python code for this question, and all following questions, can be
+found in the Appendix.
+
 \newpage
 \section*{Question 2}
 \fakesection{2}
@@ -163,17 +166,25 @@ The result of multiplying $X(z)$ and $Y(z)$ can be obtained by convolving their
 respective vectors and interpreting the outcome as the coefficients of the
 polynomial product. That is,
 \begin{align*}
-    v_X \ast v_Y = [1, -1, -3, -6, -29, -35, -40, 10, 12, -39, 36]
+    X(z)Y(z) = \sum_{i=0}^{M+N-1} (v_X \ast v_Y)_i z^{-i}
+    % v_X \ast v_Y = [1, -1, -3, -6, -29, -35, -40, 10, 12, -39, 36]
 \end{align*}
-This can be calculated using the \texttt{convolve} function from the Python
+where $M$ and $N$ are the lengths of $v_X$ and $v_Y$, respectively, and
+$(v_X\ast v_Y)_i$ denotes the $i^\text{th}$ element of the vector produced by
+the convolution of $v_X$ with $v_Y$. In terms of the latter, $v_X\ast v_Y$ can
+be calculated using the \texttt{convolve} function from the
 \texttt{scipy.signal} library:
 \begin{center}
     \texttt{signal.convolve(vx, vy, mode="full", method="direct")}
 \end{center}
-which calculates the full discrete linear convolution, automatically
+This calculates the full discrete linear convolution, automatically
 zero-padding the vectors as necessary, using traditional convolution (i.e.
 multiplying and summing, as opposed to the FFT).
 
+The result is:
+\begin{align*}
+    v_X \ast v_Y = [1, -1, -3, -6, -29, -35, -40, 10, 12, -39, 36]
+\end{align*}
 Hence, we can interpret the convolution result as the polynomial product of
 $X(z)$ and $Y(z)$ as
 \begin{align*}
@@ -185,26 +196,27 @@ could equivalently Fourier transform both vectors, multiply in the Fourier
 domain, then perform an inverse Fourier transform to obtain the same vector of
 coefficients derived above.
 
-When doing this in Python, we must manually zero-pad the vectors before
+To demonstrate this in Python, we manually zero-pad the vectors before
 performing the FFT.
 \begin{center}
     \texttt{vx = np.pad(vx, (0, len(vy) - 1))} \\
     \texttt{vy = np.pad(vy, (0, len(vx) - 1))}
 \end{center}
-Here, the Python \texttt{numpy} package is used to zero-pad both vectors on the
-right side only to the appropriate length. Then, \texttt{fft} and \texttt{ifft}
-from \texttt{scipy.fft} can be applied:
+Here, the \texttt{numpy} package is used to zero-pad both vectors to the right
+to the appropriate length. Then, \texttt{fft} and \texttt{ifft} from
+\texttt{scipy.fft} can be applied:
 \begin{center}
     \texttt{ifft(fft(vx) * fft(vy))}
 \end{center}
-This calculates the following vector, which we can observe is identical to the
+This calculates the following vector, which, as expected, is identical to the
 vector determined through direct convolution:
 \begin{center}
     \texttt{[  1.  -1.  -3.  -6. -29. -35. -40.  10.  12. -39.  36.]}
 \end{center}
-Hence, the same polynomial product can be constructed from either convolving the
-vector representations of the polynomials, or multiplying the Fourier transforms
-of the vectors, then taking the inverse Fourier transform.
+Hence, the coefficients of the product of two polynomials can be determined from
+either convolving vectors of their respective coefficients, or by Fourier
+transforming those vectors, multiplying them together, then taking the inverse
+Fourier transform of the result.
 
 \newpage
 \section*{Question 3}
@@ -216,29 +228,30 @@ transform techniques.
 \begin{align*}
     x = 8755790 && \text{and} && y = 1367267
 \end{align*}
-First, however, we can perform regular multiplication to determine the correct
-answer that we should get from the convolution and Fourier transform methods:
+Before that, however, we can perform regular multiplication to determine the
+correct answer:
 \begin{align*}
     8755790 \times 1367267 = 11971502725930
 \end{align*}
-Next, the numbers are constructed digit-wise into vectors:
+Having done that, we construct the numbers digit-wise into vectors:
 \begin{align*}
     v_x = [8, 7, 5, 5, 7, 9, 0] && \text{and} && v_y = [1, 3, 6, 7, 2, 6, 7]
 \end{align*}
 As before, the result of multiplying $x$ and $y$ can be obtained by convolving
 their respective vectors. However, the ``carry" step must then be performed to
-produce a number in base 10.
+produce a number in base 10. This will become clearer after the convolution has
+been performed.
 
-Once again, using \texttt{convolve} from \texttt{scipy.signal} with the same
-keyword arguments:
+Using the same \texttt{signal.convolve} method from Question 2, the following
+result is determined:
 \begin{align*}
     v_x \ast v_y = [8, 31, 74, 118, 117, 157, 212, 192, 142, 95, 103, 63, 0]
 \end{align*}
-Now, however, unlike with the polynomial multiplication, we cannot expect to
-arrive at the correct value by simply stringing together all of these digits.
+Now, however, unlike with polynomial multiplication, we cannot expect to
+arrive at the correct product by simply stringing together all the digits.
 Instead, starting from the right, each value must be taken modulo 10, and the
 remainder added to the value immediately to the left. This yields the following
-vector, which now can be concatenated into the result of $x \times y$:
+base-10 vector, which can now be concatenated into the product of $x \times y$:
 \begin{align*}
     [1, 1, 9, 7, 1, 5, 0, 2, 7, 2, 5, 9, 3, 0] \longrightarrow 11971502725930
 \end{align*}
@@ -249,13 +262,15 @@ Again, in Python, the vectors must be zero-padded before performing the FFT.
     \texttt{vx = np.pad(vx, (0, len(vy) - 1))} \\
     \texttt{vy = np.pad(vy, (0, len(vx) - 1))}
 \end{center}
-Then, using the same Python function calls as from Question 2:
+Then, in the same manner as Question 2:
 \begin{center}
-    \texttt{ifft(fft(vx) * fft(vy)) =}
+    \texttt{ifft(fft(vx) * fft(vy))} =
         [8.  31.  74. 118. 117. 157. 212. 192. 142.  95. 103.  63.   0.]
 \end{center}
-The result is identical to the vector produced by convolution. Therefore,
-applying the same ``carrying'' process will yield the same number result.
+As expected, the vector produced by this method is identical to that produced by
+direct convolution. Therefore, if we apply the same ``carrying'' process that we
+applied above, we will no doubt arrive at the same value for the product of
+$x\times y$.
 
 Hence, integer multiplication also can be accomplished by either convolving the
 vector representations of the numbers and converting to base 10, or multiplying
@@ -276,11 +291,14 @@ and converting to base 10.
         \texttt{fft(y)} = [&28,\ 2.243+j4.243,\ -2-j2,\ -6.243+j4.243,\ \\
                            &-8,\ -6.243-j4.243,\ -2+j2,\ 2.243-j4.243]
     \end{align*}
-    Now, we combine $x$ and $y$ element-wise into a single complex vector:
+    This gives us the expected result of the double transform algorithm. Now, to
+    proceed, we combine $x$ and $y$ element-wise into a single complex vector:
     \begin{align*}
-        z = [1+j\ \ 2+j5\ \ 4+j3\ \ 4+j\ \ 5+j3\ \ 3+j5\ \ 7+j3\ \ 8+j7]
+        z = [1+j,\ 2+j5,\ 4+j3,\ 4+j,\ 5+j3,\ 3+j5,\ 7+j3,\ 8+j7]
     \end{align*}
-    and Fourier transform this to obtain:
+    We can use the same \texttt{fft} function without any additional
+    considerations to Fourier transform this complex vector. Doing so, we
+    obtain:
     \begin{align*}
         \texttt{fft(z)} = [&34+j28,\ -6.121+j8.778,\ -3+j5,\ -10.364-j5.707,\ \\
                            &-j8,\ -1.879-j6.778,\ -7-j9,\ 2.364-j4.293]
@@ -339,28 +357,26 @@ and converting to base 10.
         \texttt{fft(y)} = [&21,\ -2.707-j0.707,\ -2-j9,\ -1.293-j0.707 \\
                            &-1,\ -1.293+j0.707,\ -2+j9,\ -2.707+j0.707]
     \end{align*}
-    As before, we combine $x$ and $y$ element-wise into a single complex vector,
-    but this time we must right-pad $y$ with zero such that the vectors are
-    equal length.
+    As before, we combine $x$ and $y$ element-wise into a single complex vector:
     \begin{align*}
         z = [1+j\ \ 2+j5\ \ 4+j3\ \ 4+j\ \ 5+j3\ \ 3+j5\ \ 7+j3\ \ 8+j0]
     \end{align*}
-    The Fourier transform of $z$ is
+    Using \texttt{scipy.fft}, the Fourier transform of $z$ is
     \begin{align*}
         \texttt{fft(z)} = [&34+j21,\ -1.172+j3.828,\ 4+j5,\ -5.414-j0.757,\\
                            &-j,\ -6.828-j1.828,\ -14-j9,\ -2.586-j9.243]
     \end{align*}
-    Again, the Fourier transforms of $x$ and $y$ can individually be determined
-    from $Z$ using the even and odd components of the real and imaginary parts
-    of $Z$, per part (a). Hence,
+    Akin to part (a), the Fourier transforms of $x$ and $y$ can individually be
+    determined from $Z$ using the even and odd components of the real and
+    imaginary parts of $Z$.
     \begin{align*}
         \Ev(\Re(Z)) &= [34,\ -1.879,\ -5,\ -6.121,\ 0,\ -6.121,\ -5,\ -1.879] \\
         \Od(\Im(Z)) &= [0,\ 6.536,\ 7,\ 0.536,\ 0,\ -0.536,\ -7,\ -6.536] \\
         \Ev(\Im(Z)) &= [0,\ 0.707,\ 9,\ 0.707,\ 0,\ -0.707,\ -9,\ -0.707] \\
         \Od(\Re(Z)) &= [21,\ -2.707,\ -2,\ -1.293,\ -1,\ -1.293,\ -2,\ -2.707]
     \end{align*}
-    Part part (a), we can reconstruct the individual Fourier transforms of $x$
-    and $y$:
+    Finally, we can reconstruct the individual Fourier transforms of $x$ and
+    $y$:
     \begin{align*}
         X = [&34,\ -1.879+j6.536,\ -5+j7,\ -6.121+j0.536 \\
              &0,\ -6.121-j0.536,\ -5-j7,\ -1.879-j6.536] \\
@@ -373,9 +389,9 @@ and converting to base 10.
     \begin{align*}
         \texttt{ifft(Y) = [ 1.  5.  3.  1.  3.  5.  3. -0.]}
     \end{align*}
-    Hence, given we know how many zeros were padded onto the end of the shorter
-    sequence, it can indeed be recovered. Therefore, the double transform
-    algorithm can be applied even if the sequences differ in length.
+    Given we know how many zeros were padded onto the shorter sequence, it can
+    indeed be recovered by truncating the extra length. Therefore, the double
+    transform algorithm can be applied even if the sequences differ in length.
 
 \end{enumerate}
 
@@ -385,12 +401,13 @@ and converting to base 10.
 
 \begin{enumerate}[label=\alph*)]
 
-    \item Given the polynomial
+    \item We are given the following polynomial, and want to determine its poles
+    and zeros.
     \begin{align*}
         F(z) = 1 + 5z^{-1} + 3z^{-2} + 4z^{-3} + 4z^{-4} + 2z^{-5} + z^{-6}
     \end{align*}
-    the absence of a denominator indicates an all-zero model. The positions of
-    the zeros in the complex plane are the roots of $F(z)$, which can be found
+    Immediately, the absence of a denominator indicates an all-zero model. The
+    coordinates of the zeros are the complex roots of $F(z)$, which can be found
     using \texttt{numpy.polynomial}:
     \begin{center}
         \texttt{Polynomial([1, 5, 3, 4, 4, 2, 1]).roots()}
@@ -409,12 +426,12 @@ and converting to base 10.
     \end{figure}
 
     \item The sinusoidal steady-state response of the system can be modelled by
-    evaluating the magnitude of $F(z)$ around the unit circle. This is
+    evaluating the magnitude of $F(z)$ around the unit circle, which is
     effectively what is done by the DFT.
 
     That is,
     \begin{align*}
-        F(z) \big|_{z=e^{-j\frac{2\pi}{N}k},\ k=0,\ldots,N-1}
+        F(z) \big|_{z=e^{-j2\pi k/N},\ k=0,\ldots,N-1}
     \end{align*}
     Figure \ref{fig:q5b_dftsample} compares \texttt{scipy.fft} and a
     self-implemented DFT function for $N=128$.
@@ -426,6 +443,12 @@ and converting to base 10.
     \end{figure}
 
 \end{enumerate}
+
+\newpage
+\section*{Question 6}
+\section*{Question 7}
+\section*{Question 8}
+\section*{Question 9}
 
 %-----------------------
 % Code listings
