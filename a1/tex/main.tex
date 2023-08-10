@@ -446,6 +446,43 @@ and converting to base 10.
 
 \newpage
 \section*{Question 6}
+\fakesection{6}
+
+Consider the following ``continuous'' 7 Hz sine wave and its representation in
+the Fourier domain.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q6_sine7hz.png}
+    \caption{Time and frequency views of a 7 Hz sine wave (rendered at
+        1 kHz)}
+    \label{fig:q6_sine7hz}
+\end{figure}
+
+The discrete nature of computer graphics means the visualisation is not truly
+continuous, and is actually rendered in timesteps of 1 millisecond. However, for
+the purposes of this question, we treat it as continuous to enable comparisons
+with subsequence sampled and re-sampled signals. The Fourier transform of the
+function demonstrates a single peak at 7 Hz, as one would expect.
+
+We now sample the sine wave at 20 Hz, above the Nyquist frequency of 14 Hz.
+Therefore, in theory, it should be possible to perfectly reconstruct the
+original signal.
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q6_sampled.png}
+    \caption{Time and frequency views of the 7 Hz sine wave sampled at 20 Hz.}
+    \label{fig:q6_sampled}
+\end{figure}
+
+In the Fourier domain of Figure \ref{fig:q6_sampled}, we observe the same single
+peak at 7 Hz, indicating that the signal indeed has not aliased. Yet, a linear
+interpolation clearly results in a poor representation of the original sine wave.
+
+\newpage
+
+
+
+\newpage
 \section*{Question 7}
 \section*{Question 8}
 \section*{Question 9}

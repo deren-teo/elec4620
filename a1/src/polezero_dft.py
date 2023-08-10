@@ -5,11 +5,11 @@ Determines the roots of a certain polynomials and produces a pole-zero plot.
 Evaluates the magnitude of the polynomial around the unit circle using the DFT.
 """
 
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
-
-from pathlib import Path
 
 from matplotlib.axes._axes import Axes
 from matplotlib.lines import Line2D
@@ -101,7 +101,7 @@ def draw_unit_circle(ax: Axes) -> Axes:
 
     return ax
 
-### SUBPARTS ###################################################################
+### ENTRYPOINT #################################################################
 
 def run_part_a(F: Polynomial) -> None:
     """
@@ -149,8 +149,6 @@ def run_part_b(poly: Polynomial) -> None:
 
     fname = Path(A1_ROOT, "output", "q5b_dftsample.png")
     fig.savefig(fname, **SAVEFIG_CONFIG)
-
-### ENTRYPOINT #################################################################
 
 def main():
 
