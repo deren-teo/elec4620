@@ -27,6 +27,16 @@ discontinuities in the pulse.
 \begin{align*}
     h'(t) = A \delta(t+\frac{T}{2}) - A \delta(t-\frac{T}{2})
 \end{align*}
+Figure \ref{fig:q1_rectangular} visualises the rectangular pulse and its first
+derivative.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.66\textwidth]{images/q1_rectangular.png}
+    \caption{A rectangular pulse and its first derivative}
+    \label{fig:q1_rectangular}
+\end{figure}
+
 Writing out the Fourier transform of the derivative, which by definition is
 \begin{align*}
     \widehat{H'}(f) \coloneqq \int_{-\infty}^{\infty} h'(t) e^{-j2\pi ft} dt
@@ -64,8 +74,6 @@ Some re-arranging and substitutions can be performed to neaten the result, if de
 \end{align*}
 Thus, we have derived the Fourier transform of a rectangular pulse.
 
-\newpage
-
 We now repeat this procedure for a triangle function using a double derivative.
 The function for a triangular pulse around $t=0$, with amplitude $A$ and width $T$, is:
 \begin{align*}
@@ -90,6 +98,16 @@ with the discontinuities in the first derivative.
              \frac{4A}{T}\delta(t) +
              \frac{2A}{T}\delta(t-\frac{T}{2})
 \end{align*}
+Figure \ref{fig:q1_triangular} visualises the triangular pulse and its first and
+second derivatives.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.99\textwidth]{images/q1_triangular.png}
+    \caption{A triangular pulse and its first and second derivatives}
+    \label{fig:q1_triangular}
+\end{figure}
+
 The Fourier transform of the second derivative is therefore
 \begin{align*}
     \widehat{H''}(f) = \frac{2A}{T}\int_{-\infty}^\infty \delta(t+\frac{T}{2}) e^{-j2\pi ft} dt -
@@ -131,8 +149,6 @@ a number of impulses which can be Fourier transformed without yielding any
 frequency-dependent coefficients. The transform of the derivative is then
 integrated $n+1$ times by dividing by $(j2\pi f)^{n+1}$; hence, the term
 $1/f^{n+1}$ is produced.
-
-\newpage
 
 Figure \ref{fig:q1_sidelobes} presents the Fourier transforms of the rectangular
 and triangular pulses, enabling a visual comparison of the rates at which their
@@ -545,5 +561,9 @@ zeros), it is much improved over the linear interpolation of Figure
 \newpage
 \section{\texttt{polezero\_dft.py}}
 \lstinputlisting{../src/polezero_dft.py}
+
+\newpage
+\section{\texttt{interpolation.py}}
+\lstinputlisting{../src/interpolation.py}
 
 \end{document}
