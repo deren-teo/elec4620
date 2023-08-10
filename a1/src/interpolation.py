@@ -13,18 +13,29 @@ import seaborn as sns
 
 from matplotlib.axes import Axes
 from matplotlib.figure import Figure
+from matplotlib.patches import Rectangle
 from scipy.fft import fft, fftfreq, ifft
 
 from config import A1_ROOT, SAVEFIG_CONFIG
 
 ### DSP FUNCTIONS ##############################################################
 
-def sinc_interpolate(x: np.array, n: int) -> np.array:
+def sinc_interpolate(x: np.array, n: int, viz: bool = False) -> np.array:
     """
     Upsamples the given signal by the specified factor using sinc interpolation.
     """
     # Increases the sampling rate of x by inserting n-1 zeros between samples
     x_upsamp = np.concatenate([[p]+[0]*(n-1) for p in x])
+
+    # (Optionally) Visualise the intermediate upsampled result
+    if viz:
+        fig, axs = time_fourier_plot(np.linspace(0, 1, len(x_upsamp)), x_upsamp)
+        axs[1].set_xlim(-5, 105)
+        axs[1].add_patch(Rectangle(
+            (0, 0), 10, 10, color=sns.color_palette()[1], fill=False, ls="--"))
+
+        fname = Path(A1_ROOT, "output", "q6_intermediate.png")
+        fig.savefig(fname, **SAVEFIG_CONFIG)
 
     # Convolve with sinc in time domain by applying rect window in freq. domain
     H_upsamp = fft(x_upsamp)
@@ -61,7 +72,7 @@ def run_question_6(x_samp: np.array):
     the results in the time and Fourier domains.
     """
     # Upsample from 20 Hz to 80 Hz
-    x_upsamp = sinc_interpolate(x_samp, 4)
+    x_upsamp = sinc_interpolate(x_samp, 4, viz=True)
     t_upsamp = np.linspace(0, 1, 80)
 
     fig, axs = time_fourier_plot(t_upsamp, x_upsamp)

@@ -461,7 +461,7 @@ the Fourier domain.
 The discrete nature of computer graphics means the visualisation is not truly
 continuous, and is actually rendered in timesteps of 1 millisecond. However, for
 the purposes of this question, we treat it as continuous to enable comparisons
-with subsequence sampled and re-sampled signals. The Fourier transform of the
+with subsequent down- and up-sampled signals. The Fourier transform of the
 function demonstrates a single peak at 7 Hz, as one would expect.
 
 We now sample the sine wave at 20 Hz, above the Nyquist frequency of 14 Hz.
@@ -470,17 +470,52 @@ original signal.
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{images/q6_sampled.png}
-    \caption{Time and frequency views of the 7 Hz sine wave sampled at 20 Hz.}
+    \caption{Time and frequency views of the 7 Hz sine wave sampled at 20 Hz}
     \label{fig:q6_sampled}
 \end{figure}
 
 In the Fourier domain of Figure \ref{fig:q6_sampled}, we observe the same single
-peak at 7 Hz, indicating that the signal indeed has not aliased. Yet, a linear
-interpolation clearly results in a poor representation of the original sine wave.
+peak at 7 Hz, indicating that the signal indeed has not aliased. Yet, linear
+interpolation clearly produces an inaccurate reconstruction of the original sine
+wave.
 
 \newpage
 
+A more accurate reconstruction can be achieved using sinc interpolation, whereby
+the sampled signal is convolved with a sinc function in the time domain.
+Alternatively, this is equivalent to multiplying the Fourier transform of the
+sampled signal by a rectangular window.
 
+As a first step, we up-sample the sampled signal from 20 Hz to 80 Hz by padding
+three zeros between each sampled value. This produces the following result:
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q6_intermediate.png}
+    \caption{Time and frequency views of intermediate upsampled signal}
+    \label{fig:q6_intermediate}
+\end{figure}
+
+Evidently, upsamping by zero padding has introduced three new peaks in the
+Fourier domain, corresponding to the number of zeros padded between each value.
+To remove these peaks, we multiply the signal by a rectangular window to filter
+out all peaks except the desired 7 Hz peak (and its negative counterpart). The
+positive half of this window is indicated in Figure \ref{fig:q6_intermediate}.
+
+To restate, this is equivalent to convolution with a sinc function in the time
+domain, and produces the sinc-interpolated signal presented in Figure
+\ref{fig:q6_upsampled}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q6_upsampled.png}
+    \caption{Time and frequency views of the 80 Hz upsampled signal}
+    \label{fig:q6_upsampled}
+\end{figure}
+
+Though still not a perfect reconstruction (which we could improve by padding with more
+zeros), it is much improved over the linear interpolation of Figure
+\ref{fig:q6_sampled}.
 
 \newpage
 \section*{Question 7}
