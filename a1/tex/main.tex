@@ -508,7 +508,7 @@ three zeros between each sampled value. This produces the following result:
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{images/q6_intermediate.png}
-    \caption{Time and frequency views of intermediate upsampled signal}
+    \caption{Time and frequency views of the intermediate upsampled signal}
     \label{fig:q6_intermediate}
 \end{figure}
 
@@ -525,7 +525,7 @@ domain, and produces the sinc-interpolated signal presented in Figure
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{images/q6_upsampled.png}
-    \caption{Time and frequency views of the 80 Hz upsampled signal}
+    \caption{Time and frequency views of the 80 Hz sinc interpolated signal}
     \label{fig:q6_upsampled}
 \end{figure}
 
@@ -535,6 +535,44 @@ zeros), it is much improved over the linear interpolation of Figure
 
 \newpage
 \section*{Question 7}
+\fakesection{7}
+
+As an alternative to sinc interpolation, a signal sampled above the Nyquist
+frequency can be interpolated by zero-padding its DFT, then inverse transforming
+back to the time domain. To compare this with sinc interpolation, we consider
+the same 7 Hz sine wave sampled at 20 Hz.
+
+Consider the Fourier transforms of the sampled and sinc interpolated signals
+from Question 6.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q7_freqcompare.png}
+    \caption{Frequency comparison: 20 Hz sampled signal and 80 Hz sinc
+        interpolated signal}
+    \label{fig:q7_freqcompare}
+\end{figure}
+
+The Fourier transform of the 20 Hz sampled signal has a positive bandwidth of
+10 Hz (and an equal negative bandwidth, the sum corresponding with the sampling
+frequency). The 80 Hz interpolated signal has a positive bandwidth of 40 Hz.
+The only difference between them is the length of the (approximately) zero
+magnitude tail. Therefore, it should be possible to recreate the interpolation
+by zero-padding the Fourier transform of the sampled signal to the desired
+length, in the both positive and negative frequencies. This produces Figure
+\ref{fig:q7_upsample}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q7_upsampled.png}
+    \caption{Time and frequency views of the 80 Hz Fourier interpolated signal}
+    \label{fig:q7_upsample}
+\end{figure}
+
+As expected, the result is visually indistinguishable from that of sinc
+interpolation.
+
+\newpage
 \section*{Question 8}
 \section*{Question 9}
 

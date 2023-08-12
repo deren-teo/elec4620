@@ -17,7 +17,7 @@ from matplotlib.patches import Circle
 from numpy.polynomial.polynomial import Polynomial, polyval
 from scipy.fft import fft
 
-from config import A1_ROOT, PLT_CONFIG, SAVEFIG_CONFIG
+from config import A1_ROOT, PLT_CONFIG, SAVEFIG_CONFIG, SNS_STYLE
 
 ### DSP FUNCTIONS ##############################################################
 
@@ -134,10 +134,18 @@ def run_part_b(poly: Polynomial) -> None:
     y_fft = np.abs(fft(poly.coef, n=128))
     y_dft = np.abs(zdft(poly.coef, N=128))
 
+    # Re-set the default Seaborn style, which was changed by part (a)
+    sns.set_style(SNS_STYLE)
+
+    # Re-set the plot text customisation, which gets overridden by set_style
+    plt.rcParams.update(PLT_CONFIG)
+
     fig, ax = plt.subplots()
 
-    sns.lineplot(x=np.arange(128), y=y_fft, ax=ax, lw=3, label=r"$\texttt{scipy.fft}$")
-    sns.lineplot(x=np.arange(128), y=y_dft, ax=ax, lw=1, label=r"Own DFT")
+    sns.lineplot(x=np.arange(128), y=y_fft, ax=ax, ls="-",  lw=2,
+        label=r"$\texttt{scipy.fft}$")
+    sns.lineplot(x=np.arange(128), y=y_dft, ax=ax, ls="--", lw=1,
+        label=r"Own DFT")
 
     ax = axes_ratio_scale(ax, ratio=1/4, padto="upper")
 
@@ -153,7 +161,7 @@ def run_part_b(poly: Polynomial) -> None:
 def main():
 
     poly = Polynomial([1, 5, 3, 4, 4, 2, 1])
-    # run_part_a(poly)
+    run_part_a(poly)
     run_part_b(poly)
 
 
