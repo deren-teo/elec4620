@@ -574,7 +574,48 @@ interpolation.
 
 \newpage
 \section*{Question 8}
+\fakesection{8}
+
+\newpage
 \section*{Question 9}
+\fakesection{9}
+
+Figure \ref{fig:q9_headings} visualises the ten homing pigeon departure headings
+and their average value.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/q9_headings.png}
+    \caption{Homing pigeon departure headings and average heading}
+    \label{fig:q9_headings}
+\end{figure}
+
+To calculate the average heading, one might consider naively summing and
+dividing the values.
+\begin{align*}
+    \frac{11+15+350+330+23+347+17+356+6+358}{10} = 181.3^\circ
+\end{align*}
+In doing so, one quickly realises that the result is exactly in the opposite
+direction to the expected average heading, because the headings are distributed
+on either side of the 360$^\circ$ modulus angle.
+
+A better method is to convert the headings into complex numbers using polar
+($e^{j\theta}$) form, average them, and determine the argument of the result.
+For example, for the heading of 11$^\circ$:
+\begin{align*}
+    e^{j(11\times(\pi/180))} \approx 0.982+j0.191
+\end{align*}
+We can perform the conversion for each heading and average the real and
+imaginary parts separately to obtain the following average heading as a complex
+number: $0.964+j0.023$.
+
+Finally, we determine the argument of the complex number and convert from
+radians to degrees:
+\begin{align*}
+    \arctan(\frac{0.023}{0.964}) \approx 0.024 \text{rad} \approx 1.390^\circ
+\end{align*}
+Hence, we have determined an average heading matching our observation of Figure
+\ref{fig:q9_headings}.
 
 %-----------------------
 % Code listings
@@ -603,5 +644,9 @@ interpolation.
 \newpage
 \section{\texttt{interpolation.py}}
 \lstinputlisting{../src/interpolation.py}
+
+\newpage
+\section{\texttt{headings.py}}
+\lstinputlisting{../src/headings.py}
 
 \end{document}
