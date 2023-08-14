@@ -576,6 +576,55 @@ interpolation.
 \section*{Question 8}
 \fakesection{8}
 
+This question aims to use the Fourier transform to determine the duration of a solar cycle using annual
+sunspot data from 1700 to 2018. There are several assumptions associated with this:
+\begin{itemize}
+    \item the solar cycle is approximately sinusoidal;
+    \item the sampling rate of the data is 1 year;
+    \item the Nyquist effects are negligible in the data; and
+    \item the data has a DC gain; i.e. a non-variable number of sunspots
+          occuring each year.
+\end{itemize}
+Given these assumptions hold, the following analysis should find the average
+number of years in the solar cycle. We begin by observing the annual sunspot
+data, presented in Figure \ref{fig:q9_timeseries}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/q8_timeseries.png}
+    \caption{Annual sunspot data from 1700 to 2018}
+    \label{fig:q9_timeseries}
+\end{figure}
+
+The data appears to demonstrate two superposed cyclic trends: one of
+approximately 10 year period, and another of approximately 75 year period. We
+will use the DFT to examine this.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/q8_rawdft.png}
+    \caption{Fast Fourier transform applied to the annual sunspot data}
+    \label{fig:q8_rawdft}
+\end{figure}
+
+Taking the DFT of the data, we find validation of our DC gain assumption, and
+not much else due to the relative magnitude of the DC gain. To address this, it
+is necessary to remove the DC gain by subtracting the mean of the data from the
+entire series. Doing so and repeating the DFT, we find the result of Figure
+\ref{fig:q8_nodcdft}.
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/q8_nodcdft.png}
+    \caption{Fast Fourier transform applied after removing DC gain}
+    \label{fig:q8_nodcdft}
+\end{figure}
+
+Having removed the DC gain, the other features in the data become much more
+apparent.
+
 \newpage
 \section*{Question 9}
 \fakesection{9}
