@@ -529,8 +529,8 @@ domain, and produces the sinc-interpolated signal presented in Figure
     \label{fig:q6_upsampled}
 \end{figure}
 
-Though still not a perfect reconstruction (which we could improve by padding with more
-zeros), it is much improved over the linear interpolation of Figure
+Though still not a perfect reconstruction (which we could improve by padding
+with more zeros), it is much improved over the linear interpolation of Figure
 \ref{fig:q6_sampled}.
 
 \newpage
@@ -576,8 +576,9 @@ interpolation.
 \section*{Question 8}
 \fakesection{8}
 
-This question aims to use the Fourier transform to determine the duration of a solar cycle using annual
-sunspot data from 1700 to 2018. There are several assumptions associated with this:
+This question aims to use the Fourier transform to determine the duration of a
+solar cycle using annual sunspot data from 1700 to 2018. There are several
+assumptions associated with this:
 \begin{itemize}
     \item the solar cycle is approximately sinusoidal;
     \item the sampling rate of the data is 1 year;
@@ -597,7 +598,7 @@ data, presented in Figure \ref{fig:q9_timeseries}.
 \end{figure}
 
 The data appears to demonstrate two superposed cyclic trends: one of
-approximately 10 year period, and another of approximately 75 year period. We
+approximately 10 year period, and another of approximately 80 year period. We
 will use the DFT to examine this.
 
 \begin{figure}[ht]
@@ -607,7 +608,7 @@ will use the DFT to examine this.
     \label{fig:q8_rawdft}
 \end{figure}
 
-Taking the DFT of the data, we find validation of our DC gain assumption, and
+Taking the DFT of the data, we find validation of the DC gain assumption, and
 not much else due to the relative magnitude of the DC gain. To address this, it
 is necessary to remove the DC gain by subtracting the mean of the data from the
 entire series. Doing so and repeating the DFT, we find the result of Figure
@@ -617,13 +618,126 @@ entire series. Doing so and repeating the DFT, we find the result of Figure
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/q8_nodcdft.png}
+    \includegraphics[width=0.85\textwidth]{images/q8_nodcdft.png}
     \caption{Fast Fourier transform applied after removing DC gain}
     \label{fig:q8_nodcdft}
 \end{figure}
 
 Having removed the DC gain, the other features in the data become much more
-apparent.
+apparent. We now turn our attention to the possibility of spurious components
+in the DFT due to the truncation of the series before the first and after the
+last years in the data. To investigate this, we apply the rectangular, Hann and
+Blackman windows to the time series data and compare the resulting Fourier
+transforms.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/q8_windowed.png}
+    \caption{Effects of rectangular, Hann and Blackman windows}
+    \label{fig:q8_windows}
+\end{figure}
+
+\newpage
+
+Addressing the windows in order, we first observe that applying the rectangular
+window has no visible effect. This is because the original series, truncated to
+the range 1700 to 2018, is effectively multiplied by a rectangular window around
+the same range. Hence, applying the rectangular window again is redundant.
+Meanwhile, the Hann and Blackman windows emphasise the peaks in the Fourier
+transform and suppress the other frequencies; the effect is more pronounced for
+the Blackman window than the Hann window. As we are after the maxima in the
+Fourier transform, we prefer the Blackman window over the other two.
+
+To precisely locate the maxima, we will refer to the coarse and fine search
+algorithm described by Rife and Boorstyn\footnote{D. C. Rife and R. R. Boorstyn,
+``Single-tone parameter estimation from discrete-time observations,"
+\textit{IEEE Trans. Inf. Theory}, vol. IT-20, no. 5, pp. 591-598, Sep., 1974.}.
+However, whereas the Rife and Boorstyn algorithm finds a single global maximum,
+we are interested in identifying two peaks. Therefore, we will apply the
+algorithm twice separately on the frequency ranges $[0, 0.5]$ and $[0.5, 1.5]$.
+
+The Rife and Boorstyn algorithm searches for a maximum of $|A(\omega)|$, where
+$A(\omega)$ is defined as
+\begin{align*}
+    A(\omega) = \frac{1}{N} \sum_{n=0}^{N-1} Z_n \exp(-jn\omega T)
+\end{align*}
+in which $Z_n$ is the $n$-th observation of the discrete signal $Z$ of total
+length $N$, and the frequency $\omega$ is defined between 0 and $\omega_s$, the
+sampling frequency\textsuperscript{1}. The sampling period $T$ is the inverse of
+$\omega_s$. The coarse search evaluates $|A(\omega)|$ at the set of frequencies
+$\{\omega_k\}$ defined by:
+\begin{align*}
+    \omega_k = \frac{2\pi k}{MT}, \quad k = 0,1,2,\ldots,M-1
+\end{align*}
+where $M$ is $2N$, $4N$, or $8N$\textsuperscript{1}. This is equivalent to
+evaluating the DFT of the set $\{\bar{Z}_n\}$\textsuperscript{1}:
+\begin{align*}
+    \bar{Z}_n = \begin{cases}
+        (M/N)Z_n, & n = 0,1,2,\ldots,N-1 \\
+        0,        & n = N,N+1,\ldots,M
+    \end{cases}
+\end{align*}
+Hence, the coarse search can be performed by constructing the set
+$\{\bar{Z}_n\}$ and returning the discrete frequency with the largest amplitude
+in the DFT of $\{\bar{Z}_n\}$\textsuperscript{1}. Applied to the sunspot data
+and using $M=2N$, the coarse search finds the two peaks of interest at
+frequencies 0.089 and 0.011 per year, corresponding with periods of
+approximately 11.2 and 91.1 years.
+
+The fine search performs a narrow uni-directional sweep of the region around the
+coarse result. Let us denote an arbitrary coarse search result as $\omega_l$.
+The direction of the sweep depends on the gradient of $|A(\omega_l)|$; if the
+gradient of $|A(\omega_l)|$ is positive, the desired maximum is at a value of
+$\omega>\omega_l$, else if the gradient of $|A(\omega_l)|$ is negative, the
+desired maximum $\omega<\omega_l$\textsuperscript{1}.
+
+As recommended by Rife\footnote{D. C. Rife, ``Digital tone parameter estimation
+in the presence of Gaussian noise," Ph.D. disseration, Polytech. Inst. Brooklyn,
+Brooklyn, N.Y., Jun. 1973.}, the fine search iterates in steps of size
+$\omega_s/(5N)$. The search terminates when the gradient of $|A(\omega)|$
+crosses zero\textsuperscript{2}. Finally, the last two points on either side of
+the zero are input to the secant root-finding method\footnote{Wikipedia.
+``Secant method." Wikipedia.org. https://en.wikipedia.org/wiki/Secant\_method
+(accessed Aug. 14, 2023).}. The secant method is considered to have converged
+once the difference between successive approximations is less than half the
+desired precision; we choose a precision of five decimal places, which will
+yield the required three decimal places in the reciprocals.
+
+Applying the fine search to the coarse results from the sunspot data, the peaks
+are found at frequencies of approximately 0.01115 and 0.08947 per year, or
+equivalently, periods of approximately 11.176 and 89.664 years.
+
+\newpage
+
+Figure \ref{fig:q8_searchresults} presents DFT of the Blackman-windowed signal
+with the identified frequencies.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q8_searchresults.png}
+    \caption{DFT of Blackman-windowed signal with identified frequencies in red}
+    \label{fig:q8_searchresults}
+\end{figure}
+
+Notice also how the identified frequencies occur between points of the DFT,
+especially evident in the second peak. The Rife and Boorstyn\textsuperscript{1}
+algorithm enables higher precision than simply returning the frequency which
+produces the largest response in the DFT.
+
+The 11.176-year period in the sunspot data corroborates the general consensus
+of a solar cycle period of approximately 11 years\footnote{Wikipedia. ``Solar
+cycle.'' Wikipedia.org. https://en.wikipedia.org/wiki/Solar\_cycle (accessed
+Aug. 14, 2023).}. However, observations of cycles as short as 9 years or as
+long as 14 years have been recorded\textsuperscript{4}, somewhat undermining
+the precision of the identified value. Similarly, the 89.664-year feature
+corroborates the period of the Gleissberg cycle, which describes an amplitude
+modulation of solar cycles with a period between 70 to 100
+years\textsuperscript{4}.
+
+The large variance in both sets of observations makes it more difficult to
+justify the three decimal point precision from a purely practical standpoint.
+Nevertheless, this investigation has proven to be a useful exercise in
+applying DSP methods to extract information from real data.
 
 \newpage
 \section*{Question 9}
@@ -675,27 +789,32 @@ Hence, we have determined an average heading matching our observation of Figure
     \LARGE{\textbf{Appendix}}
 \end{center}
 
-\section{\texttt{sidelobes.py}}
+\section{Code Listings}
+\subsection{\texttt{sidelobes.py}}
 \lstinputlisting{../src/sidelobes.py}
 
 \newpage
-\section{\texttt{multiplying.py}}
+\subsection{\texttt{multiplying.py}}
 \lstinputlisting{../src/multiplying.py}
 
 \newpage
-\section{\texttt{double\_transform.py}}
+\subsection{\texttt{double\_transform.py}}
 \lstinputlisting{../src/double_transform.py}
 
 \newpage
-\section{\texttt{polezero\_dft.py}}
+\subsection{\texttt{polezero\_dft.py}}
 \lstinputlisting{../src/polezero_dft.py}
 
 \newpage
-\section{\texttt{interpolation.py}}
+\subsection{\texttt{interpolation.py}}
 \lstinputlisting{../src/interpolation.py}
 
+\subsection{\texttt{sunspots.ipynb}}
+\textit{(Starts on the following page)}
+\includepdf[pages=-]{pdfpages/q8_sunspots.pdf}
+
 \newpage
-\section{\texttt{headings.py}}
+\subsection{\texttt{headings.py}}
 \lstinputlisting{../src/headings.py}
 
 \end{document}
