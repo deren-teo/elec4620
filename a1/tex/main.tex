@@ -133,6 +133,7 @@ Finally, as with the rectangular pulse, we can re-arrange this result into a
 more familiar form:
 \begin{align*}
     H(f) = \frac{A}{\pi^2f^2T}(1 - \cos(\pi Tf))
+         = \frac{AT}{2} \text{sinc}^2(\frac{Tf}{2})
 \end{align*}
 Thus, we have derived the Fourier transform of a triangular pulse.
 
@@ -195,14 +196,12 @@ be calculated using the \texttt{convolve} function from the
 \end{center}
 This calculates the full discrete linear convolution, automatically
 zero-padding the vectors as necessary, using traditional convolution (i.e.
-multiplying and summing, as opposed to the FFT).
-
-The result is:
+multiplying and summing, as opposed to the FFT). The result is:
 \begin{align*}
     v_X \ast v_Y = [1, -1, -3, -6, -29, -35, -40, 10, 12, -39, 36]
 \end{align*}
 Hence, we can interpret the convolution result as the polynomial product of
-$X(z)$ and $Y(z)$ as
+$X(z)$ and $Y(z)$:
 \begin{align*}
     1 - z^{-1} - 3z^{-2} - 6z^{-3} - 29z^{-4} - 35z^{-5} - 40z^{-6} + 10z^{-7} +
     12z^{-8} - 39z^{-9} + 36z^{-10}
@@ -215,14 +214,14 @@ coefficients derived above.
 To demonstrate this in Python, we manually zero-pad the vectors before
 performing the FFT.
 \begin{center}
-    \texttt{vx = np.pad(vx, (0, len(vy) - 1))} \\
-    \texttt{vy = np.pad(vy, (0, len(vx) - 1))}
+    \texttt{v\_x = np.pad(v\_x, (0, len(v\_y) - 1))} \\
+    \texttt{v\_y = np.pad(v\_y, (0, len(v\_x) - 1))}
 \end{center}
 Here, the \texttt{numpy} package is used to zero-pad both vectors to the right
 to the appropriate length. Then, \texttt{fft} and \texttt{ifft} from
 \texttt{scipy.fft} can be applied:
 \begin{center}
-    \texttt{ifft(fft(vx) * fft(vy))}
+    \texttt{ifft(fft(v\_x) * fft(v\_y))}
 \end{center}
 This calculates the following vector, which, as expected, is identical to the
 vector determined through direct convolution:
@@ -275,12 +274,12 @@ Naturally, the same outcome can be achieved by Fourier transforming the vectors,
 multiplying in the Fourier domain, then inverse Fourier transforming the result.
 Again, in Python, the vectors must be zero-padded before performing the FFT.
 \begin{center}
-    \texttt{vx = np.pad(vx, (0, len(vy) - 1))} \\
-    \texttt{vy = np.pad(vy, (0, len(vx) - 1))}
+    \texttt{v\_x = np.pad(v\_x, (0, len(v\_y) - 1))} \\
+    \texttt{v\_y = np.pad(v\_y, (0, len(v\_x) - 1))}
 \end{center}
 Then, in the same manner as Question 2:
 \begin{center}
-    \texttt{ifft(fft(vx) * fft(vy))} =
+    \texttt{ifft(fft(v\_x) * fft(v\_y))} =
         [8.  31.  74. 118. 117. 157. 212. 192. 142.  95. 103.  63.   0.]
 \end{center}
 As expected, the vector produced by this method is identical to that produced by
@@ -559,7 +558,7 @@ frequency). The 80 Hz interpolated signal has a positive bandwidth of 40 Hz.
 The only difference between them is the length of the (approximately) zero
 magnitude tail. Therefore, it should be possible to recreate the interpolation
 by zero-padding the Fourier transform of the sampled signal to the desired
-length, in the both positive and negative frequencies. This produces Figure
+length, in both the positive and negative frequencies. This produces Figure
 \ref{fig:q7_upsample}.
 
 \begin{figure}[ht]
@@ -790,31 +789,14 @@ Hence, we have determined an average heading matching our observation of Figure
 \end{center}
 
 \section{Code Listings}
-\subsection{\texttt{q1\_sidelobes.py}}
-\lstinputlisting{../src/q1_sidelobes.py}
-
-\newpage
-\subsection{\texttt{q2\_3\_multiplying.py}}
-\lstinputlisting{../src/q2_3_multiplying.py}
-
-\newpage
-\subsection{\texttt{q4\_double\_transform.py}}
-\lstinputlisting{../src/q4_double_transform.py}
-
-\newpage
-\subsection{\texttt{q5\_polezero\_dft.py}}
-\lstinputlisting{../src/q5_polezero_dft.py}
-
-\newpage
-\subsection{\texttt{q6\_7\_interpolation.py}}
-\lstinputlisting{../src/q6_7_interpolation.py}
-
-\subsection{\texttt{q8\_sunspots.ipynb}}
 \textit{(Starts on the following page)}
-\includepdf[pages=-]{pdfpages/q8_sunspots.pdf}
 
-\newpage
-\subsection{\texttt{q9\_headings.py}}
-\lstinputlisting{../src/q9_headings.py}
+\includepdf[pages=-]{pdfpages/q1_sidelobes.pdf}
+\includepdf[pages=-]{pdfpages/q2_3_multiplying.pdf}
+\includepdf[pages=-]{pdfpages/q4_double_transform.pdf}
+\includepdf[pages=-]{pdfpages/q5_polezero.pdf}
+\includepdf[pages=-]{pdfpages/q6_7_interpolation.pdf}
+\includepdf[pages=-]{pdfpages/q8_sunspots.pdf}
+\includepdf[pages=-]{pdfpages/q9_headings.pdf}
 
 \end{document}
