@@ -421,24 +421,32 @@ and converting to base 10.
     \begin{align*}
         F(z) = 1 + 5z^{-1} + 3z^{-2} + 4z^{-3} + 4z^{-4} + 2z^{-5} + z^{-6}
     \end{align*}
-    Immediately, the absence of a denominator indicates an all-zero model. The
-    coordinates of the zeros are the complex roots of $F(z)$, which can be found
-    using \texttt{numpy.polynomial}:
+    The absence of a denominator indicates an all-zero model (or, more
+    accurately, all poles occur at the origin and are thus omitted from the
+    pole-zero plot). In canonical form:
+    \begin{align*}
+        F(z) \cdot \frac{z^6}{z^6} = \frac{1 + 2z + 4z^{2} + 4z^{3} + 3z^{4} +
+            5z^{5} + z^{6}}{z^6}
+    \end{align*}
+    The coordinates of the zeros are the complex roots of the numerator of
+    $F(z)$, which can be found using \texttt{numpy.polynomial}:
     \begin{center}
-        \texttt{Polynomial([1, 5, 3, 4, 4, 2, 1]).roots()}
+        \texttt{Polynomial([1, 2, 4, 4, 3, 5, 1]).roots()}
     \end{center}
     This finds the following six roots:
     \begin{align*}
-        z = -1.332,\ -0.628\pm j1.565,\ -0.223,\ 0.405\pm j1.011
+        z = -4.490,\ -0.751,\ -0.221\pm j0.551,\ 0.342\pm j0.852
     \end{align*}
     Figure \ref{fig:q5a_polezero} plots these on the complex plane, with the unit
     circle for reference.
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=0.76\textwidth]{images/q5a_polezero.png}
+        \includegraphics[width=0.8\textwidth]{images/q5a_polezero.png}
         \caption{Zero plot for $F(z)$; no poles are present.}
         \label{fig:q5a_polezero}
     \end{figure}
+
+\newpage
 
     \item The sinusoidal steady-state response of the system can be modelled by
     evaluating the magnitude of $F(z)$ around the unit circle, which is
@@ -452,7 +460,7 @@ and converting to base 10.
     self-implemented DFT function for $N=128$.
     \begin{figure}[ht]
         \centering
-        \includegraphics[width=0.76\textwidth]{images/q5b_dftsample.png}
+        \includegraphics[width=0.8\textwidth]{images/q5b_dftsample.png}
         \caption{$|F(z)|$ evaluated at 128 points around the unit circle.}
         \label{fig:q5b_dftsample}
     \end{figure}
