@@ -1,5 +1,6 @@
 # Repository specific ignores (extracted data, etc.)
 a*/output/*
+a*/tex/main.pdf
 
 # LaTeX auxiliary files
 *.bbl

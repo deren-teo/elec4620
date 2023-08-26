@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Path to the project root
-A1_ROOT = Path(__file__).parent.parent.resolve()
+A2_ROOT = Path(__file__).parent.parent.resolve()
 
 ### PLOT CONFIG ################################################################
 
