@@ -5,6 +5,9 @@ a*/tex/main.pdf
 # LaTeX auxiliary files
 *.bbl
 *.bcf
+*.blg
+*.fdb_latexmk
+*.fls
 *.run.xml
 *.synctex.gz
 *.aux
