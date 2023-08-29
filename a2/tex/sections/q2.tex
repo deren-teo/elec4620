@@ -1,0 +1,76 @@
+\section*{Question 2}
+\fakesection{2}
+
+\begin{enumerate}[label=\alph*)]
+    \item Consider a linear phase FIR filter with an odd number of taps, $N=2k+1$, such that the order of the filter is even: $M=2k$. We are interested in the filter response at $z=1$ and $-1$. As seen in Question 1, linear phase implies symmetric or antisymmetric coefficients.
+
+    We first consider the symmetric case: $h[n]=h[M-n]$. When the coefficients are symmetric, the first $k-1$ coefficients are equal to the last $k-1$ coefficients in reverse order, leaving only the $k$-th coefficient unpaired. Hence,
+    \begin{align}
+        H(z) = \sum_{n=0}^{2k} h[n] z^{-n}
+             = \sum_{n=0}^{k-1} h[n](z^{-n} + z^{n-M}) + h[k] z^{-k}
+    \end{align}
+    By observing $H(1)$ and $H(-1)$, we find that neither $z=1$ nor $z=-1$ are zeros:
+    \begin{align*}
+        H(1) &= \sum_{n=0}^{k-1} h[n](1 + 1) + h[k](1) \\
+             &= 2 \sum_{n=0}^{k-1} h[n] + h[k]
+    \intertext{and}
+        H(-1) &= \sum_{n=0}^{k-1} h[n]\left((-1)^{-n} + (-1)^{n-M}\right) + h[k](-1)^{-k} \\
+              &= 2 \sum_{n=0}^{k-1} h[n](-1)^{-n} + h[k](-1)^{-k}
+    \end{align*}
+    For $H(-1)$ above, note that $(-1)^{-n}$ and $(-1)^{n-M}$ are always equal because $M$ is even.
+
+    Similarly, let us observe the antisymmetric case: $h[n]=-h[M-n]$. When the coefficients are antisymmetric, the first $k-1$ are equal to the negation of the last $k-1$ coefficients in reverse order:
+    \begin{align}
+        H(z) = \sum_{n=0}^{2k} h[n] z^{-n}
+             = \sum_{n=0}^{k-1} h[n](z^{-n} - z^{n-M}) + h[k] z^{-k}
+    \end{align}
+    Again, observing $H(1)$ and $H(-1)$, we find that neither $z=1$ nor $z=-1$ are zeros:
+    \begin{align*}
+        H(1) &= \sum_{n=0}^{k-1} h[n](1 - 1) + h[k] z^{-k}
+              = h[k] z^{-k}
+    \intertext{and}
+        H(-1) &= \sum_{n=0}^{k-1} h[n]((-1)^{-n} + (-1)^{n-M}) + h[k] z^{-k} \\
+              &= 2 \sum_{n=0}^{k-1} h[n](-1)^{-n} + h[k] z^{-k}
+    \end{align*}
+    Thus, we reach our first conclusion:
+    \begin{enumerate}[label=\roman*)]
+        \item A linear phase FIR filter with an odd number of taps has no zeros at $z=1$ or $-1$.
+    \end{enumerate}
+
+\newpage
+
+    \item Now consider a linear phase FIR filter with an even number of taps, $N=2k$, such that the order of the filter is odd: $M=2k-1$. Again, we are interested in the filter response at $z=1$ and $-1$.
+
+    We first consider the symmetric case: $h[n]=h[M-n]$. When the coefficients are symmetric, the first $k$ coefficients are equal to the second $k$ coefficients in reverse order. Hence,
+    \begin{align}
+        H(z) = \sum_{n=0}^{2k-1} h[n] z^{-n}
+             = \sum_{n=0}^{k-1} h[n] (z^{-n} + z^{n-M})
+    \end{align}
+    By observing $H(1)$ and $H(-1)$, we find that $z=-1$ is a zero but $z=1$ is not:
+    \begin{align*}
+        H(1) &= \sum_{n=0}^{k-1} h[n](1 + 1) = 2 \sum_{n=0}^{k-1} h[n]
+    \intertext{and}
+        H(-1) &= \sum_{n=0}^{k-1} h[n]((-1)^{-n} + (-1)^{n-M}) = 0
+    \end{align*}
+    For $H(-1)$ above, $(-1)^{-n}$ and $(-1)^{n-M}$ always have opposite sign because $M$ is odd. This implies a linear phase FIR filter with symmetric coefficients and even length must be low pass (or at least cannot be high pass), because the high frequencies near $z=-1$, corresponding to the sampling frequency, are attenuated by their proximity to a zero.
+
+    Similarly, let us observe the antisymmetric case: $h[n]=-h[M-n]$. When the coefficients are symmetric, the first $k$ coefficients are equal to the negation of the second $k$ coefficients in reverse order:
+    \begin{align}
+        H(z) = \sum_{n=0}^{2k-1} h[n] z^{-n}
+             = \sum_{n=0}^{k-1} h[n](z^{-n} - z^{n-M})
+    \end{align}
+    Once more, observing $H(1)$ and $H(-1)$, we find that $z=1$ is a zero but $z=-1$ is not:
+    \begin{align*}
+        H(1) &= \sum_{n=0}^{k-1} h[n](1 - 1) = 0
+    \intertext{and}
+        H(-1) &= \sum_{n=0}^{k-1} h[n]((-1)^{-n} - (-1)^{n-M}) \\
+              &= 2 \sum_{n-0}^{k-1} h[n](-1)^{-n}
+    \end{align*}
+    This implies a linear phase FIR filter with antisymmetric coefficients and even length must be high pass (or at least cannot be low pass), because the low frequencies near $z=1$, corresponding to DC, are attenuated by their proximity to a zero.
+
+    Thus, we reach our second and third conclusions:
+    \begin{enumerate}[label=\roman*)] \setcounter{enumii}{1}
+        \item A high pass linear phase FIR filter with an even number of taps has a zero at $z=1$.
+        \item A low pass linear phase FIR filter with an even number of taps has a zero at $z=-1$.
+    \end{enumerate}
+\end{enumerate}
