@@ -1,7 +1,7 @@
 \section*{Question 3}
 \fakesection{3}
 
-This problem compares the window method of filter design, using various fixed windows, with the optimal Parks-McClelland method. The aim is to design a band pass FIR filter to meet the following specifications:
+This problem compares the window method of filter design, using various fixed windows, with the optimal Parks-McClellan method. The aim is to design a band pass FIR filter to meet the following specifications:
 \begin{multicols}{2}
     \begin{itemize}
         \item Sampling frequency: $f_s=40$ kHz
@@ -93,4 +93,13 @@ With these modifications, we find the Blackman-windowed filter meets all given s
     \end{subfigure}
 \end{figure}
 
-We now design a filter to the same specifications using the optimal Parks-McClelland method.
+We now design a filter to the same specifications using the optimal Parks-McClellan method.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/q3_optimal_freqz.png}
+    \caption{An optimal filter designed using the Parks-McClellan method}
+    \label{fig:q3_optimal_freqz}
+\end{figure}
+
+This filter was implemented using the \texttt{scipy.signal.remez} method. Starting from the final Blackman-windowed filter length of 160, the number of taps in the optimal filter was reduced until just meeting the requirements. The final filter shown in Figure \ref{fig:q3_optimal_freqz} has 140 taps.
