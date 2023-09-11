@@ -27,7 +27,7 @@ Therefore, we initially estimate a filter length of 63. We can now formulate a K
 \begin{align}
     w(n) = \frac{I_0(\beta(1 - [2n/(N-1)]^2)^{1/2})}{I_0(\beta)}, \quad |n| \leq (N-1)/2
 \end{align}
-In (4.2), $I_0$ is the Bessel function of the first kind, evaluated numerically\textsuperscript{1}, and $\beta$ is a piecewise function of the required attenuation, $A$:
+In (4.2), $I_0$ is the Bessel function of the first kind, evaluated numerically\footnote{Jake Gunther, Logan, UT, USA. \textit{FIR Filter Design using the Window Method.} (Apr. 11, 2020). Accessed: Aug. 30, 2023. [Online Video]. Available: https://www.youtube.com/watch?v=2tmilbi4L0o}, and $\beta$ is a piecewise function of the required attenuation, $A$:
 \begin{align}
     \beta = \begin{cases}
         0, & A \leq 21 \text{ dB} \\
@@ -68,8 +68,21 @@ We multiply the ideal impulse response by the Kaiser window defined by (4.2) to 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{images/q4_kaiser_freqz.png}
-    \caption{Kaiser-windowed filter frequency response; requirements coloured}
+    \caption{Kaiser-windowed filter frequency response}
     \label{fig:q4_kaiser_freqz}
 \end{figure}
 
-Figure \ref{fig:q4_kaiser_freqz} shows that both the stop band (red) and pass band (green) requirements are fulfilled. We now design a filter to the same specifications using the optimal Parks-McClellan method.
+Figure \ref{fig:q4_kaiser_freqz} shows that all filter requirements are fulfilled. We now design a filter to the same specifications using the optimal Parks-McClellan method.
+
+\newpage
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/q4_optimal_freqz.png}
+    \caption{An optimal filter designed using the Parks-McClellan method}
+    \label{fig:q4_optimal_freqz}
+\end{figure}
+
+This filter was implemented using the \texttt{scipy.signal.remez} method. Starting from the Kaiser-windowed filter length of 126, the number of taps in the optimal filter was reduced until meeting the stop band attentuation requirement. The final filter shown in Figure \ref{fig:q4_optimal_freqz} has 119 taps.
+
+Comparing the filters produced by the two methods, while both fulfil all requirements, the Kaiser-windowed filter requires a slightly larger number of taps, and its computational cost will be proportional. Hence, in this case the optimal filter ought to be preferred.
