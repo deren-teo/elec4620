@@ -46,51 +46,22 @@ We multiply the ideal impulse response by each window of length $N$ to determine
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/q3_window_freqzs.png}
+    \includegraphics[width=0.9\textwidth]{images/q3_window_freqzs.png}
     \caption{Filter frequency response using various windows}
     \label{fig:q3_window_freqzs}
 \end{figure}
 
-From Figure \ref{fig:q3_window_freqzs}, only the Blackman window achieves the stop band attenuation requirement. However, the zoomed view of Figure \ref{fig:q3_zoom_1} shows that filter rolls off too quickly and does not meet the 3 dB pass band requirement at 6 kHz.
-
-\begin{figure}[!ht]
-    \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/q3_zoom_1.png}
-        \caption{Stop band specification is met}
-        \label{fig:q3_zoom_0}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/q3_zoom_2.png}
-        \caption{Pass band specification not met}
-        \label{fig:q3_zoom_1}
-    \end{subfigure}
-\end{figure}
-
-As the roll-off is too fast rather than too gradual, this cannot be solved by simply increasing the length of the filter. Instead, we increase the filter length to 160 and also add one to the right side of the pass band of the ideal frequency vector, $V$.
+From Figure \ref{fig:q3_window_freqzs}, only the Blackman window achieves the stop band attenuation requirement. However, the filter rolls off too quickly and does not meet the 3 dB pass band requirement at 6 kHz. As the roll-off is too fast rather than too gradual, this cannot be solved by simply increasing the length of the filter. Instead, we increase the filter length to 150 and also add one to the right side of the pass band of the ideal frequency vector, $V$.
 
 \newpage
 
-With these modifications, we find the Blackman-windowed filter meets all given specifications.
+With these modifications, we find the Blackman-windowed filter meets the given specifications.
 
 \begin{figure}[ht]
     \centering
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/q3_zoom_3.png}
-        \caption{Stop band specification is met}
-        \label{fig:q3_zoom_3}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.45\textwidth}
-        \centering
-        \includegraphics[width=\textwidth]{images/q3_zoom_4.png}
-        \caption{Pass band specification is met}
-        \label{fig:q3_zoom_4}
-    \end{subfigure}
+    \includegraphics[width=0.9\textwidth]{images/q3_blackman_freqz.png}
+    \caption{Blackman filter meeting specifications after modification}
+    \label{fig:q3_blackman_freqz}
 \end{figure}
 
 We now design a filter to the same specifications using the optimal Parks-McClellan method.
@@ -102,4 +73,6 @@ We now design a filter to the same specifications using the optimal Parks-McClel
     \label{fig:q3_optimal_freqz}
 \end{figure}
 
-This filter was implemented using the \texttt{scipy.signal.remez} method. Starting from the final Blackman-windowed filter length of 160, the number of taps in the optimal filter was reduced until just meeting the requirements. The final filter shown in Figure \ref{fig:q3_optimal_freqz} has 140 taps.
+This filter was implemented using the \texttt{scipy.signal.remez} method. Starting from the final Blackman-windowed filter length of 160, the number of taps in the optimal filter was reduced until fulfilling the stop band attentuation requirement. The final filter shown in Figure \ref{fig:q3_optimal_freqz} has 140 taps.
+
+Comparing the filters produced by the two methods, while both fulfil all requirements, the Blackman-windowed filter requires a larger number of taps, and its computational cost will be proportional. Hence, in this case the optimal filter ought to be preferred.
