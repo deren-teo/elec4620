@@ -1,0 +1,34 @@
+\section*{Question 4}
+\fakesection{4}
+
+For this problem, we use the Euclidean algorithm to find the GCD of 313451351 and 513454536.
+
+\begin{enumerate}
+    \item GCD(513454536, 313451351) $\longrightarrow 513454536 = 313451351 \times 1 + 200003185$
+    \item GCD(313451351, 200003185) $\longrightarrow 313451351 = 200003185 \times 1 + 113448166$
+    \item GCD(200003185, 113448166) $\longrightarrow 200003185 = 113448166 \times 1 + 86555019$
+    \item GCD(113448166, 86555019) $\longrightarrow 113448166 = 86555019 \times 1 + 26893147$
+    \item GCD(86555019, 26893147) $\longrightarrow 86555019 = 26893147 \times 3 + 5875578$
+    \item GCD(26893147, 5875578) $\longrightarrow 26893147 = 5875578 \times 4 + 3390835$
+    \item GCD(5875578, 3390835) $\longrightarrow 5875578 = 3390835 \times 1 + 2484743$
+    \item GCD(3390835, 2484743) $\longrightarrow 3390835 = 2484743 \times 1 + 906092$
+    \item GCD(2484743, 906092) $\longrightarrow 2484743 = 906092 \times 2 + 672559$
+    \item GCD(906092, 672559) $\longrightarrow 906092 = 672559 \times 1 + 233533$
+    \item GCD(672559, 233533) $\longrightarrow 672559 = 233533 \times 2 + 205493$
+    \item GCD(233533, 205493) $\longrightarrow 233533 = 205493 \times 1 + 28040$
+    \item GCD(205493, 28040) $\longrightarrow 205493 = 28040 \times 7 + 9213$
+    \item GCD(28040, 9213) $\longrightarrow 28040 = 9213 \times 3 + 401$
+    \item GCD(9213, 401) $\longrightarrow 9213 = 401 \times 22 + 391$
+    \item GCD(401, 391) $\longrightarrow 401 = 391 \times 1 + 10$
+    \item GCD(391, 10) $\longrightarrow 391 = 10 \times 39 + 1$
+    \item GCD(10, 1) $\longrightarrow 10 = 1 \times 10 + 0$
+\end{enumerate}
+
+Hence, the GCD is 1. By definition, then, 313451351 and 513454536 must be relatively prime.
+
+Finally, we want to go in the reverse direction and find two numbers with at least 10 digits each that have a GCD of 71. Denote these $a$ and $b$. We can pick two different prime numbers and repeatedly multiply $a$ by the first and $b$ by the second until both have at least 10 digits. E.g.
+\begin{align*}
+    a = 71 \times 17^{6} = 1713767399 \\
+    b = 71 \times 19^{6} = 3340257551
+\end{align*}
+By the notion of prime factorisation, it is trivial to see that these numbers have a GCD of 71.
