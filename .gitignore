@@ -1,6 +1,8 @@
 # Repository specific ignores (extracted data, etc.)
 a*/output/*
 a*/tex/main.pdf
+a3/src/*.jpg
+a3/src/bird_or_not
 
 # LaTeX auxiliary files
 *.bbl

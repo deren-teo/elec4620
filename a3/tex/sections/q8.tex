@@ -1,0 +1,56 @@
+\section*{Question 8}
+\fakesection{8}
+
+\begin{enumerate}[label=\alph*)]
+
+    \item Using fast.ai \texttt{dataloaders}, the batch size can be specified using the \texttt{bs} argument:
+    \begin{center}
+        \texttt{dls = DataBlock(...).dataloaders(..., bs=BATCH\_SIZE)}
+    \end{center}
+    Using a ResNet-18 model pre-trained on the ImageNet dataset, we compare model training speed using batch sizes of: 16, 32, 64, 128 and 256 samples. Three trials are performed for each batch size. Each trial re-initialises the model and fine-tunes it for three epochs. Table \ref{tab:bs_exp} records the average time per trial.
+
+    \begin{table}[ht]
+        \small \centering \restretch{1.2}
+        \caption{Average training time for 3 epochs with varying batch size}
+        \begin{tabularx}{0.37\textwidth}{c c}
+            \toprule
+            \textbf{Batch Size} & \textbf{Avg. Time (s)} \\
+            \midrule
+             16 & 7.81 \\
+             32 & 6.92 \\
+             64 & 6.41 \\
+            128 & 5.79 \\
+            256 & 5.89 \\
+            \bottomrule
+        \end{tabularx}
+        \label{tab:bs_exp}
+    \end{table}
+
+    The tabulated data suggests that for the modest hardware on which the experiments were performed (an NVIDIA 3060 GPU), a batch size of 128 samples is most efficient, followed closely by a batch size of 256 samples. The reason for this is elaborated on in part c).
+
+    \item We can also compare the performance of CUDA from Table \ref{tab:bs_exp} to the CPU using
+    \begin{center}
+        \texttt{fastai.torch\_core.default\_device(False)}
+    \end{center}
+    which disables CUDA as the default device (hence defaulting to CPU). Table \ref{tab:bs_exp_cpu} repeats the experiment of part a) on the CPU with a reduced selection of batch sizes.
+
+    \begin{table}[ht]
+        \small \centering \restretch{1.2}
+        \caption{Average training time for 3 epochs with varying batch size}
+        \begin{tabularx}{0.34\textwidth}{c c}
+            \toprule
+            \textbf{Batch Size} & \textbf{Avg. Time (s)} \\
+            \midrule
+             16 & 115.54 \\
+             64 & 105.70 \\
+            256 &  98.92 \\
+            \bottomrule
+        \end{tabularx}
+        \label{tab:bs_exp_cpu}
+    \end{table}
+
+    Unsurprisingly, CUDA eclipses CPU performance in all cases, approaching a factor of 17 for batch sizes of 64 and 256. CUDA leverages hardware designed for parallel compute, whereas CPUs are predominantly serial. CUDA therefore achieves significantly better machine learning performance, where a batch can be processed all at once in parallel.
+
+    \item Finally, we use the native Windows system monitor to compare GPU activity when training using a batch size of 16 versus 128.
+
+\end{enumerate}
