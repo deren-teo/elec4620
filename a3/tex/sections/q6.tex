@@ -1,0 +1,65 @@
+\section*{Question 6}
+\fakesection{6}
+
+This problem compares the performance of the Cooley-Tukey FFT algorithm to a naive DFT. Beginning with the DFT, for an input sequence $\{x_n\}$ of length $N$, the DFT computes:
+\begin{align}
+    X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-\frac{i2\pi}{N}kn},\ k = 0 \ldots N - 1
+\end{align}
+Each of the $N$ summations has $N$ terms, giving a tight bound on the time complexity in $\Theta(N^2)$. Compare this to the general case of the Cooley-Tukey algorithm, visualised in Figure \ref{fig:viz_cooley_tukey}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/q6_viz_cooley_tukey.png}
+    \caption{Visualisation of the Cooley-Tukey algorithm (general case)}
+    \label{fig:viz_cooley_tukey}
+\end{figure}
+
+The algorithm reshapes the input into an $N_1\times N_2$ row-major matrix, where $N_1N_2=N$. Subsequently, the DFT is applied to each column and row, with total time complexity in $\Theta(N_1N_2^2+N_2N_1^2)$. Twiddle factors are applied between the column and row DFTs to rectify phase errors introduced by packing the signal into an aligned matrix. This has complexity in $\Theta(N)$. Finally, the matrix is reshaped in column-major order back into a vector. The overall time complexity is in:
+\begin{align}
+    \Theta(N_1N_2^2 + N_2N_1^2 + N) \subseteq \Theta(N_1N_2^2 + N_2N_1^2) = \Theta(N(N_1+N_2))
+\end{align}
+Given $N_1+N_2<N_1N_2=N$, we have $\Theta(N(N_1+N_2))\subset \Theta(N^2)$ and so we conclude that the Cooley-Tukey FFT is asymptotically faster than the DFT. We test this on the following 15-point signal; the Fourier transform is calculated by \texttt{scipy.fft} as a reference.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q6_signal.png}
+    \caption{Time and frequency domain representation of a simple 15-point signal}
+    \label{fig:q6_signal}
+\end{figure}
+
+\newpage
+
+The naive DFT produces the Fourier transform presented in Figure \ref{fig:q6_dft}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q6_dft.png}
+    \caption{Fourier transform by naive DFT algorithm}
+    \label{fig:q6_dft}
+\end{figure}
+
+The Cooley-Tukey implementation produces the Fourier transform presented in Figure \ref{fig:q6_cooley_tukey}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q6_cooley_tukey.png}
+    \caption{Fourier transform by Cooley-Tukey algorithm}
+    \label{fig:q6_cooley_tukey}
+\end{figure}
+
+Both implementations produce the correct result and have average timings shown in Table \ref{tab:q6_timings}.
+
+\begin{table}[ht]
+    \small \centering \restretch{1.2}
+    \caption{Average runtime (ms) on 15-point sequence over 10,000 trials}
+    \begin{tabularx}{0.5\textwidth}{r R r}
+        \toprule
+        \textbf{\texttt{scipy.fft}} & \textbf{DFT} & \textbf{Cooley-Tukey FFT} \\
+        \midrule
+        0.007 & 0.372 & 0.246 \\
+        \bottomrule
+    \end{tabularx}
+    \label{tab:q6_timings}
+\end{table}
+
+The Cooley-Tukey FFT demonstrates a respectable 50\% speedup over the naive DFT, even for a relatively small signal of length 15. This demonstrates the advantage of the FFT and the reason why the direct DFT is rarely used in practice. (Of course, both implementations are still dwarfed in performance by \texttt{scipy.fft}, which is no doubt optimised beyond layman sensibility.)

@@ -1,0 +1,43 @@
+\section*{Question 7}
+\fakesection{7}
+
+This problem compares the Good-Thomas FFT algorithm with the other algorithms implemented in Question 6. The Good-Thomas algorithm is visualised in Figure \ref{fig:q7_viz_good_thomas}.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/q7_viz_good_thomas.png}
+    \caption{Visualisation of the Good-Thomas algorithm}
+    \label{fig:q7_viz_good_thomas}
+\end{figure}
+
+The algorithm reshapes the input into an $N_1\times N_2$ matrix, where $N_1N_2=N$, by populating elements along the extended diagonal. The DFT is then applied to each column and row, with total time complexity in $\Theta(N_1N_2^2 + N_2N_1^2)$. The construction of the matrix means twiddle factors are not required. To reshape the matrix into a signal, the $i$-th row and $j$-th column is placed into the $(N_1i+N_2j)$-th index in the output vector. The overall time complexity is in:
+\begin{align}
+    \Theta(N_1N_2^2 + N_2N_1^2)
+\end{align}
+While the asymptotic time complexity is equal to that of the Cooley-Tukey algorithm, the fact that twiddle factors are not needed means the Good-Thomas algorithm is faster in practice.
+
+Figure \ref{fig:q7_good_thomas} shows the transformed result produced by the Good-Thomas algorithm.
+
+\begin{figure}[ht]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/q7_good_thomas.png}
+    \caption{Fourier transform by Good-Thomas algorithm}
+    \label{fig:q7_good_thomas}
+\end{figure}
+
+Table \ref{tab:q7_timings} compares the average timing of the algorithm compared to those from Question 6.
+
+\begin{table}[ht]
+    \small \centering \restretch{1.2}
+    \caption{Average runtime (ms) on 15-point sequence over 10,000 trials}
+    \begin{tabularx}{0.7\textwidth}{r R r r}
+        \toprule
+        \textbf{\texttt{scipy.fft}} & \textbf{DFT} & \textbf{Cooley-Tukey FFT} & \textbf{Good-Thomas FFT} \\
+        \midrule
+        0.007 & 0.372 & 0.246 & 0.224 \\
+        \bottomrule
+    \end{tabularx}
+    \label{tab:q7_timings}
+\end{table}
+
+The Good-Thomas algorithm achieves around 10\% speedup over the Cooley-Tukey algorithm. Again, this is for a short signal; the difference should grow proportionally to signal length (because twiddle factor computation grows linearly with length), which is why this algorithm is generally preferred over the Cooley-Tukey algorithm.
