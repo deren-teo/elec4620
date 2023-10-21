@@ -1,7 +1,7 @@
 \section*{Question 4}
 \fakesection{4}
 
-For this problem, we use the Euclidean algorithm to find the GCD of 313451351 and 513454536.
+We use the Euclidean algorithm to find the GCD of 313451351 and 513454536.
 
 \begin{enumerate}
     \item GCD(513454536, 313451351) $\longrightarrow 513454536 = 313451351 \times 1 + 200003185$
@@ -24,11 +24,11 @@ For this problem, we use the Euclidean algorithm to find the GCD of 313451351 an
     \item GCD(10, 1) $\longrightarrow 10 = 1 \times 10 + 0$
 \end{enumerate}
 
-Hence, the GCD is 1. By definition, then, 313451351 and 513454536 must be relatively prime.
+The GCD is 1, so 313451351 and 513454536 are relatively prime.
 
-Finally, we want to go in the reverse direction and find two numbers with at least 10 digits each that have a GCD of 71. Denote these $a$ and $b$. We can pick two different prime numbers and repeatedly multiply $a$ by the first and $b$ by the second until both have at least 10 digits. E.g.
+We can also go in reverse and find two numbers, $a$ and $b$, with at least 10 digits each and a GCD of 71. We repeatedly multiply 71 by two distinct primes until reaching 10 digits:
 \begin{align*}
     a = 71 \times 17^{6} = 1713767399 \\
     b = 71 \times 19^{6} = 3340257551
 \end{align*}
-By the notion of prime factorisation, it is trivial to see that these numbers have a GCD of 71.
+By prime factorisation (71 is prime), GCD($a$, $b$) $= 71$.

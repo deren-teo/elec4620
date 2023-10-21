@@ -1,15 +1,15 @@
 \section*{Question 5}
 \fakesection{5}
 
-The Chinese remainder theorem is applicable for any set of divisors that are pairwise coprime, which is true of the set \{5, 6, 7, 11\}. Hence, denoting the number of soldiers $n$, we have:
+The Chinese remainder theorem can be applied to any set of pairwise coprime divisors, which is true of \{5, 6, 7, 11\}. Denoting the number of soldiers $n$:
 \begin{align*}
     n \text{ mod } 5 = 3 && n \text{ mod } 6 = 3 && n \text{ mod } 7 = 1 && n \text{ mod } 11 = 0
 \end{align*}
-We can therefore enumerate the values satisfying each condition until finding a common value between all sets, which we are told must be less than or equal to 1200.
+We can enumerate all values satisfying each of the above until finding a common value, which must be less than or equal to 1200.
 \begin{align*}
     5k + 3  &= \{3, 8, \dots, 1018, 1023\} \\
     6k + 3  &= \{3, 9, \dots, 1017, 1023\} \\
     7k + 1  &= \{1, 8, \dots, 1016, 1023\} \\
     11k + 0 &= \{0, 11, \dots, 1012, 1023\}
 \end{align*}
-Hence, the number of soldiers after the battle must be $n=1012$.
+Hence, the number of soldiers after the battle must be $n=1023$.

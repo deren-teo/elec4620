@@ -14,37 +14,27 @@ Each of the $N$ summations has $N$ terms, giving a tight bound on the time compl
     \label{fig:viz_cooley_tukey}
 \end{figure}
 
-The algorithm reshapes the input into an $N_1\times N_2$ row-major matrix, where $N_1N_2=N$. Subsequently, the DFT is applied to each column and row, with total time complexity in $\Theta(N_1N_2^2+N_2N_1^2)$. Twiddle factors are applied between the column and row DFTs to rectify phase errors introduced by packing the signal into an aligned matrix. This has complexity in $\Theta(N)$. Finally, the matrix is reshaped in column-major order back into a vector. The overall time complexity is in:
+In words, where $N_1N_2=N$, the algorithm:
+\begin{enumerate}
+    \item Reshapes the input into an $N_1\times N_2$ row-major matrix; time complexity in $\Theta(N)$.
+    \item Performs DFT on each column; in $\Theta(N_1N_2^2)$.
+    \item Applies twiddle factors to each element to rectify phase errors introduced by packing the signal into an aligned matrix; in $\Theta(N)$.
+    \item Performs DFT on each row; in $\Theta(N_2N_1^2)$.
+    \item Reshapes the matrix in column-major order back into a vector; in $\Theta(N)$.
+\end{enumerate}
+The overall time complexity is in:
 \begin{align}
-    \Theta(N_1N_2^2 + N_2N_1^2 + N) \subseteq \Theta(N_1N_2^2 + N_2N_1^2) = \Theta(N(N_1+N_2))
+    \Theta(N_1N_2^2) + \Theta(N_2N_1^2) + \Theta(N) \subset \Theta(N(N_1+N_2))
 \end{align}
-Given $N_1+N_2<N_1N_2=N$, we have $\Theta(N(N_1+N_2))\subset \Theta(N^2)$ and so we conclude that the Cooley-Tukey FFT is asymptotically faster than the DFT. We test this on the following 15-point signal; the Fourier transform is calculated by \texttt{scipy.fft} as a reference.
+Given $N_1+N_2<N_1N_2=N$, we have $\Theta(N(N_1+N_2))\subset \Theta(N^2)$ and so we conclude that the Cooley-Tukey FFT is asymptotically faster than the DFT. We test this on the 15-point signal of Figure \ref{fig:q6_signal}; the Fourier transform is also calculated using \texttt{scipy.fft} as a reference.
+
+\newpage
 
 \begin{figure}[ht]
     \centering
     \includegraphics[width=0.8\textwidth]{images/q6_signal.png}
     \caption{Time and frequency domain representation of a simple 15-point signal}
     \label{fig:q6_signal}
-\end{figure}
-
-\newpage
-
-The naive DFT produces the Fourier transform presented in Figure \ref{fig:q6_dft}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/q6_dft.png}
-    \caption{Fourier transform by naive DFT algorithm}
-    \label{fig:q6_dft}
-\end{figure}
-
-The Cooley-Tukey implementation produces the Fourier transform presented in Figure \ref{fig:q6_cooley_tukey}.
-
-\begin{figure}[ht]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/q6_cooley_tukey.png}
-    \caption{Fourier transform by Cooley-Tukey algorithm}
-    \label{fig:q6_cooley_tukey}
 \end{figure}
 
 Both implementations produce the correct result and have average timings shown in Table \ref{tab:q6_timings}.

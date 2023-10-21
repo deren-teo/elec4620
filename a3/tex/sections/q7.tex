@@ -10,7 +10,17 @@ This problem compares the Good-Thomas FFT algorithm with the other algorithms im
     \label{fig:q7_viz_good_thomas}
 \end{figure}
 
-The algorithm reshapes the input into an $N_1\times N_2$ matrix, where $N_1N_2=N$, by populating elements along the extended diagonal. The DFT is then applied to each column and row, with total time complexity in $\Theta(N_1N_2^2 + N_2N_1^2)$. The construction of the matrix means twiddle factors are not required. To reshape the matrix into a signal, the $i$-th row and $j$-th column is placed into the $(N_1i+N_2j)$-th index in the output vector. The overall time complexity is in:
+In words, where $N_1N_2=N$, the algorithm:
+\begin{enumerate}
+    \item Constructs an $N_1\times N_2$ matrix along the extended diagonal; time complexity in $\Theta(N)$.
+    \item Performs DFT on each column and row; in $\Theta(N_1N_2^2 + N_2N_1^2)$.
+    \item Constructs the output signal using the following indexing, in $\Theta(N)$:
+    \begin{align*}
+        \text{out}[(N_1 i + N_2 j) \text{ mod } N] = \text{mat}[i,j]
+    \end{align*}
+    where $i$ and $j$ are matrix row and column indices, respectively.
+\end{enumerate}
+The construction means twiddle factors are not required. The overall time complexity is in:
 \begin{align}
     \Theta(N_1N_2^2 + N_2N_1^2)
 \end{align}
@@ -20,12 +30,14 @@ Figure \ref{fig:q7_good_thomas} shows the transformed result produced by the Goo
 
 \begin{figure}[ht]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/q7_good_thomas.png}
+    \includegraphics[width=0.8\textwidth]{images/q7_transform.png}
     \caption{Fourier transform by Good-Thomas algorithm}
     \label{fig:q7_good_thomas}
 \end{figure}
 
 Table \ref{tab:q7_timings} compares the average timing of the algorithm compared to those from Question 6.
+
+\newpage
 
 \begin{table}[ht]
     \small \centering \restretch{1.2}
@@ -40,4 +52,4 @@ Table \ref{tab:q7_timings} compares the average timing of the algorithm compared
     \label{tab:q7_timings}
 \end{table}
 
-The Good-Thomas algorithm achieves around 10\% speedup over the Cooley-Tukey algorithm. Again, this is for a short signal; the difference should grow proportionally to signal length (because twiddle factor computation grows linearly with length), which is why this algorithm is generally preferred over the Cooley-Tukey algorithm.
+The Good-Thomas algorithm achieves around 10\% speedup over the Cooley-Tukey algorithm. Again, this is for a short signal; the difference should grow proportionally to signal length (since the number of twiddle factors is proportional to length), which is why the Good-Thomas algorithm is generally preferred over the Cooley-Tukey algorithm.

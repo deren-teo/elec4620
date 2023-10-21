@@ -1,9 +1,9 @@
 \section*{Question 3}
 \fakesection{3}
 
-This problem repeats the polyphase interpolator of Question 2, but adds the additional task of frequency shifting the interpolated signal by heterodyning with a 10 kHz carrier. This is easily achieved with a signal extra step. After zero-padding and reshaping the filter coefficients into a matrix of $L$ rows, where $L$ is the upsampling factor, we multiply each row by
+This problem repeats the polyphase interpolator of Question 2, but adds the additional task of frequency shifting the interpolated signal by heterodyning with a 10 kHz carrier. This is easily achieved with a single extra step. After zero-padding and reshaping the filter coefficients into a matrix of $L$ rows, where $L$ is the upsampling factor, we multiply each row by
 \begin{align}
-    c(n) = \cos(2\pi nk/M),\ n = 0..L-1
+    c(n) = \cos(2\pi nk/L),\ n = 0 \dots L-1
 \end{align}
 where $n$ is the row index and $k$ is a constant which determines the shift:
 \begin{align}
